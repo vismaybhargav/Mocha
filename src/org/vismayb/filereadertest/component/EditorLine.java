@@ -12,9 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EditorLine extends HBox {
-    int lineNumber;
-    String text;
-    List<Token> tokens;
+    private int lineNumber;
+    private String text;
+    private List<Token> tokens;
 
     public EditorLine(final String text, final int lineNumber) {
         this.lineNumber = lineNumber;
@@ -39,9 +39,7 @@ public class EditorLine extends HBox {
 
         Pattern numberRegex = Pattern.compile("\\b\\d+(\\.\\d+)?([eE][+-]?\\d+)?[fFdD]?\\b\n");
 
-        Pattern whiteSpaceRegex = Pattern.compile("\\S+");
-
-        Pattern everythingElseRegex = Pattern.compile("(?!\\b(?:abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\\b)\\S+\n");
+        Pattern whiteSpaceRegex = Pattern.compile("\\s+");
 
         Matcher matcher = keywordRegex.matcher(str);
 
@@ -49,7 +47,6 @@ public class EditorLine extends HBox {
         // editorLine as a sequential list of tokens.
 
         //==----- ALL Regex Matching -----==\\
-        // TODO: Add a feature to add whatever else.
         while(matcher.find()) {
             tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.KEYWORD));
         }
@@ -60,38 +57,39 @@ public class EditorLine extends HBox {
         while(matcher.find()) {
             tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.INTEGER_LITERAL));
         }
-        */
+         */
 
+        /*
         matcher = whiteSpaceRegex.matcher(str);
 
         while(matcher.find()) {
             tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.WHITESPACE));
         }
-
-        matcher = everythingElseRegex.matcher(str);
-        while(matcher.find()) {
-            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.MISC));
-        }
+         */
     }
 
-    //TODO: Refactor so that we aren't building the view based on the tokens giving but rather
+    // TODO: Refactor so that we aren't building the view based on the tokens giving but rather
     // COLORING the view using the token offsets!!!! This would mean that we still have the syntax highlighting
-    // but we dont need to worry about weird regexing!!. Hooly im so genius
+    // but we dont need to worry about weird regex-ing!!. Holy im so genius
     private void generateView() {
-        Collections.sort(tokens); //To get a sequential list of all the tokens as the appear in the file
+        Collections.sort(tokens); //To get a sequential list of all the tokens as they appear in the file
 
         // Line Number
-        getChildren().add(createText(Integer.toString(lineNumber), "SF Mono", 20));
+        getChildren().add(createText(Integer.toString(lineNumber)));
 
-        for (var token : tokens) {
-            var t = createText(token.content(), "SF Mono", 20);
-            getChildren().add(t);
+
+        for(var i = 0; i < tokens.size() - 1; i++) {
+            // Insert each token's contents in between the last token and the curr token.
+            var token = tokens.get(i);
+            getChildren().add(createText(
+                    token.content() + text.substring(token.endOffset() + 1, tokens.get(i + 1).startOffset())
+            ));
         }
     }
 
-    private static Text createText(String content, String family, int size) {
+    private static Text createText(final String content) {
         Text t = new Text(content);
-        t.setFont(Font.font(family, size));
+        t.setFont(Font.font("SF Mono", 20));
         return t;
     }
 }
