@@ -1,6 +1,8 @@
 package org.vismayb.filereadertest.component;
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.vismayb.filereadertest.backend.token.Token;
@@ -21,75 +23,58 @@ public class EditorLine extends HBox {
         this.text = text;
         tokens = new ArrayList<>();
 
-        tokenizeString(text);
+        tokenizeString();
         generateView();
     }
 
     // TODO: Move over to the backend at some point
-    public void tokenizeString(final String str) {
-        // TODO: Separate the primitive types and the keywords
+    public void tokenizeString() {
+        // TODO: Add separation for primitive types.
         Pattern keywordRegex = Pattern.compile(
-                "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const" +
-                        "|continue|default|do|double|else|enum|extends|final|finally" +
-                        "|float|for|goto|if|implements|import|instanceof|int|interface" +
-                        "|long|native|new|null|package|private|protected|public|return" +
-                        "|short|static|strictfp|super|switch|synchronized|this|throw|throws" +
-                        "|transient|try|void|volatile|while)\\b"
+                "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\\b"
         );
 
-        Pattern numberRegex = Pattern.compile("\\b\\d+(\\.\\d+)?([eE][+-]?\\d+)?[fFdD]?\\b\n");
-
-        Pattern whiteSpaceRegex = Pattern.compile("\\s+");
-
-        Matcher matcher = keywordRegex.matcher(str);
-
-        // We add the tokens to the entire list because we need to sort the list to add to the
-        // editorLine as a sequential list of tokens.
-
-        //==----- ALL Regex Matching -----==\\
+        // keyword Matcher
+        Matcher matcher = keywordRegex.matcher(text);
         while(matcher.find()) {
             tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.KEYWORD));
         }
-
-        /*
-        matcher = numberRegex.matcher(str);
-
-        while(matcher.find()) {
-            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.INTEGER_LITERAL));
-        }
-         */
-
-        /*
-        matcher = whiteSpaceRegex.matcher(str);
-
-        while(matcher.find()) {
-            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.WHITESPACE));
-        }
-         */
     }
 
-    // TODO: Refactor so that we aren't building the view based on the tokens giving but rather
-    // COLORING the view using the token offsets!!!! This would mean that we still have the syntax highlighting
-    // but we dont need to worry about weird regex-ing!!. Holy im so genius
     private void generateView() {
-        Collections.sort(tokens); //To get a sequential list of all the tokens as they appear in the file
+        Collections.sort(tokens); // To get a sequential list of all the tokens as they appear in the file
 
-        // Line Number
-        getChildren().add(createText(Integer.toString(lineNumber)));
+        // TODO:  Move the line numbers outside of the Editor into its own separate component.
+        //getChildren().add(createText(Integer.toString(lineNumber), null));
 
+        // We need to add the first bit before the first token in case the first token.startOffset() != 0
+        if(!tokens.isEmpty()) {
+            getChildren().add(createText(text.substring(0, tokens.getFirst().startOffset()), null));
+        } else {
+            // We need to just make it with the text if there are no tokens on a given line.
+            getChildren().add(createText(text, null));
+            return;
+        }
 
-        for(var i = 0; i < tokens.size() - 1; i++) {
-            // Insert each token's contents in between the last token and the curr token.
+        // Insert each token's contents in between the last token and the curr token.
+        for(var i = 0; i < tokens.size(); i++) {
             var token = tokens.get(i);
-            getChildren().add(createText(
-                    token.content() + text.substring(token.endOffset() + 1, tokens.get(i + 1).startOffset())
-            ));
+
+            if(i < tokens.size() - 1) {
+                getChildren().add(createText(token.content(), Color.RED));
+                getChildren().add(createText(text.substring(token.endOffset(), tokens.get(i + 1).startOffset()), null));
+            } else {
+                getChildren().add(createText(token.content(), Color.RED));
+                getChildren().add(createText(text.substring(token.endOffset()), null));
+            }
         }
     }
 
-    private static Text createText(final String content) {
-        Text t = new Text(content);
+    private static Text createText(final String content, final Color color) {
+        var t = new Text(content);
         t.setFont(Font.font("SF Mono", 20));
+        if(color !=  null)
+            t.setFill(color);
         return t;
     }
 }
