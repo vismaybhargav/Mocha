@@ -16,7 +16,7 @@ public record Token(int startOffset, int endOffset, String content, TokenType ty
         MISC
     }
 
-    public static int getLineNumber(Token token, File file) {
+    public int getLineNumber(File file) {
         List<String> lines = FileUtil.getAllLines(file);
 
         int currentOffset = 0;
@@ -25,7 +25,7 @@ public record Token(int startOffset, int endOffset, String content, TokenType ty
         for(String line : lines) {
             int lineLength = line.length() + 1; // Include the "\n"
 
-            if(currentOffset + lineLength > token.endOffset()) {
+            if(currentOffset + lineLength > endOffset) {
                 return lineNumber;
             }
 
@@ -38,7 +38,7 @@ public record Token(int startOffset, int endOffset, String content, TokenType ty
 
     @Override
     public int compareTo(Token o) {
-        return o.startOffset() - startOffset();
+        return startOffset() - o.startOffset();
     }
 }
 
