@@ -49,20 +49,10 @@ public class TextFileEditor extends ScrollPane {
      */
     public void recreateFileView() {
         lineContainer.getChildren().clear();
-        //gutter.getChildren().clear();
 
         for(int i = 0; i < lines.size(); i++) {
-            lineContainer.getChildren().add(new EditorLine(lines.get(i), i));
+            lineContainer.getChildren().add(new EditorLine(lines.get(i), i + 1));
         }
-
-        /*
-        for (String line : lines) {
-            var text = new Text(line);
-            text.setFont(Font.font("SF Mono", 20));
-            //text.setStyle("-fx-text-fill: #DFE1E5; -fx-background-color: #1E1F22;");
-            lineContainer.getChildren().add(text);
-        }
-         */
     }
 
     private void applyGutterConfigs() {
