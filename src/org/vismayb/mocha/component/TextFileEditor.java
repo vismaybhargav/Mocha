@@ -1,4 +1,4 @@
-package org.vismayb.filereadertest.component;
+package org.vismayb.mocha.component;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -7,7 +7,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import org.vismayb.filereadertest.FileUtil;
+import org.vismayb.mocha.backend.util.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;

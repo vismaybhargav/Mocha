@@ -1,11 +1,11 @@
-package org.vismayb.filereadertest.component;
+package org.vismayb.mocha.component;
 
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import org.vismayb.filereadertest.backend.token.Token;
+import org.vismayb.mocha.backend.token.Token;
+import org.vismayb.mocha.backend.util.RegexHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,9 +30,7 @@ public class EditorLine extends HBox {
     // TODO: Move over to the backend at some point
     public void tokenizeString() {
         // TODO: Add separation for primitive types.
-        Pattern keywordRegex = Pattern.compile(
-                "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\\b"
-        );
+        Pattern keywordRegex = RegexHelper.Companion.generateKeywordPattern(RegexHelper.JavaLangConfig.getKeywords());
 
         // keyword Matcher
         Matcher matcher = keywordRegex.matcher(text);
@@ -49,7 +47,7 @@ public class EditorLine extends HBox {
 
         // We need to add the first bit before the first token in case the first token.startOffset() != 0
         if(!tokens.isEmpty()) {
-            getChildren().add(createText(text.substring(0, tokens.getFirst().startOffset()), null));
+            getChildren().add(createText(text.substring(0, tokens.getFirst().getStartOffset()), null));
         } else {
             // We need to just make it with the text if there are no tokens on a given line.
             getChildren().add(createText(text, null));
@@ -61,11 +59,11 @@ public class EditorLine extends HBox {
             var token = tokens.get(i);
 
             if(i < tokens.size() - 1) {
-                getChildren().add(createText(token.content(), Color.RED));
-                getChildren().add(createText(text.substring(token.endOffset(), tokens.get(i + 1).startOffset()), null));
+                getChildren().add(createText(token.getContent(), Color.RED));
+                getChildren().add(createText(text.substring(token.getEndOffset(), tokens.get(i + 1).getStartOffset()), null));
             } else {
-                getChildren().add(createText(token.content(), Color.RED));
-                getChildren().add(createText(text.substring(token.endOffset()), null));
+                getChildren().add(createText(token.getContent(), Color.RED));
+                getChildren().add(createText(text.substring(token.getEndOffset()), null));
             }
         }
     }

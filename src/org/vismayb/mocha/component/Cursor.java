@@ -1,4 +1,4 @@
-package org.vismayb.filereadertest.component;
+package org.vismayb.mocha.component;
 
 import javafx.geometry.Point2D;
 

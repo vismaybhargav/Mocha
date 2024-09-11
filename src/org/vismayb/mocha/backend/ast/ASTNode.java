@@ -1,6 +1,6 @@
-package org.vismayb.filereadertest.backend.ast;
+package org.vismayb.mocha.backend.ast;
 
-import org.vismayb.filereadertest.backend.token.Token;
+import org.vismayb.mocha.backend.token.Token;
 
 import java.util.ArrayList;
 import java.util.List;

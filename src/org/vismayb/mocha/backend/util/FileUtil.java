@@ -1,4 +1,4 @@
-package org.vismayb.filereadertest;
+package org.vismayb.mocha.backend.util;
 
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;

@@ -1,4 +1,4 @@
-package org.vismayb.filereadertest;
+package org.vismayb.mocha;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -8,7 +8,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import org.vismayb.filereadertest.component.TextFileEditor;
+import org.vismayb.mocha.backend.util.FileUtil;
+import org.vismayb.mocha.component.TextFileEditor;
 
 import java.io.File;
 
