@@ -4,6 +4,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.vismayb.mocha.backend.lang.JavaLangConfig;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.backend.util.RegexHelper;
 
@@ -30,12 +31,17 @@ public class EditorLine extends HBox {
     // TODO: Move over to the backend at some point
     public void tokenizeString() {
         // TODO: Add separation for primitive types.
-        Pattern keywordRegex = RegexHelper.Companion.generateKeywordPattern(RegexHelper.JavaLangConfig.getKeywords());
 
         // keyword Matcher
         Matcher matcher = keywordRegex.matcher(text);
+        matchAllTokens(JavaLangConfig.Companion.getKeywordPattern(), Token.TokenType.KEYWORD);
+        matchAllTokens(JavaLangConfig.Companion.getNumberPattern(), Token.TokenType.NUMBER_LITERAL);
+    }
+
+    private void matchAllTokens(final Pattern pattern, final Token.TokenType tokenType) {
+        Matcher matcher = pattern.matcher(text);
         while(matcher.find()) {
-            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), Token.TokenType.KEYWORD));
+            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), tokenType));
         }
     }
 
