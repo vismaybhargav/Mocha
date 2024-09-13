@@ -6,21 +6,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.vismayb.mocha.backend.lang.JavaLangConfig;
 import org.vismayb.mocha.backend.token.Token;
-import org.vismayb.mocha.backend.util.RegexHelper;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EditorLine extends HBox {
-    private int lineNumber;
-    private String text;
-    private List<Token> tokens;
+    private final String text;
+    private final List<Token> tokens;
 
     public EditorLine(final String text, final int lineNumber) {
-        this.lineNumber = lineNumber;
         this.text = text;
         tokens = new ArrayList<>();
 
@@ -29,11 +26,10 @@ public class EditorLine extends HBox {
     }
 
     // TODO: Move over to the backend at some point
+
     public void tokenizeString() {
         // TODO: Add separation for primitive types.
 
-        // keyword Matcher
-        Matcher matcher = keywordRegex.matcher(text);
         matchAllTokens(JavaLangConfig.Companion.getKeywordPattern(), Token.TokenType.KEYWORD);
         matchAllTokens(JavaLangConfig.Companion.getNumberPattern(), Token.TokenType.NUMBER_LITERAL);
     }
@@ -45,8 +41,24 @@ public class EditorLine extends HBox {
         }
     }
 
+    private void sortTokensWithPriority() {
+        tokens.sort(Comparator.comparingInt(this::getTokenPriority)
+                .thenComparing(Token::getStartOffset)
+        );
+    }
+
+    private int getTokenPriority(final Token token) {
+        return switch(token.getType()) {
+            case Token.TokenType.COMMENT -> 0;
+            case Token.TokenType.STRING_LITERAL -> 1;
+            case Token.TokenType.NUMBER_LITERAL -> 2;
+            case Token.TokenType.KEYWORD -> 3;
+        };
+    }
+
     private void generateView() {
-        Collections.sort(tokens); // To get a sequential list of all the tokens as they appear in the file
+        sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
+        //Collections.sort(tokens);
 
         // TODO:  Move the line numbers outside of the Editor into its own separate component.
         //getChildren().add(createText(Integer.toString(lineNumber), null));
