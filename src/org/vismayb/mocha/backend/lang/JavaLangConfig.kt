@@ -5,7 +5,7 @@ import java.util.regex.Pattern
 
 class JavaLangConfig {
     companion object {
-        val keywords: Array<String> = arrayOf(
+        private val keywords: Array<String> = arrayOf(
             "abstract", "assert", "boolean", "break", "case",
             "catch", "class", "const", "continue", "default", "do",
             "else", "enum", "extends", "false", "final", "finally",
@@ -21,13 +21,19 @@ class JavaLangConfig {
             "void", "int", "double", "short", "long", "byte", "char"
         )
 
-        val instanceModifers: Array<String> = arrayOf(
+        val instanceModifiers: Array<String> = arrayOf(
             "this", "super"
         )
 
         val keywordPattern: Pattern = RegexHelper.generateKeywordPattern(keywords)
         val singleCommentPattern: Pattern = Pattern.compile("//[^\n]*")
         val multiCommentPattern: Pattern = Pattern.compile("/\\*[\\s\\S]*?\\*/\n")
-        val numberPattern: Pattern = Pattern.compile("-?\\d+(\\.\\d+)?\n")
+
+        val stringPattern: Pattern = Pattern.compile("\"(?:\\\\.|[^\"\\\\])*\"");
+
+        /**
+         * Works with +/-, f/F, l/L, decimals and integers. OPEN-AI o1 is SO SMART!!
+         */
+        val numberPattern: Pattern = Pattern.compile("[+-]?(?:\\d+\\.?\\d*|\\.\\d+)[fFlL]?")
     }
 }

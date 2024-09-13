@@ -3,11 +3,13 @@ package org.vismayb.mocha.component;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.vismayb.mocha.backend.lang.JavaLangConfig;
 import org.vismayb.mocha.backend.token.Token;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -42,6 +44,7 @@ public class EditorLine extends HBox {
     }
 
     private void sortTokensWithPriority() {
+        Collections.sort(tokens);
         tokens.sort(Comparator.comparingInt(this::getTokenPriority)
                 .thenComparing(Token::getStartOffset)
         );
@@ -57,8 +60,8 @@ public class EditorLine extends HBox {
     }
 
     private void generateView() {
-        sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
-        //Collections.sort(tokens);
+        //sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
+        Collections.sort(tokens);
 
         // TODO:  Move the line numbers outside of the Editor into its own separate component.
         //getChildren().add(createText(Integer.toString(lineNumber), null));
@@ -72,16 +75,26 @@ public class EditorLine extends HBox {
             return;
         }
 
+        System.out.println(tokens);
+
         // Insert each token's contents in between the last token and the curr token.
         for(var i = 0; i < tokens.size(); i++) {
             var token = tokens.get(i);
 
             addTokenToLineContainer(token);
+
+            if(i < tokens.size() - 1) {
+                addStringToLineContainer(text.substring(token.getEndOffset(), tokens.get(i + 1).getStartOffset()));
+            } else {
+                addStringToLineContainer(text.substring(token.getEndOffset()));
+            }
+            /*
             addStringToLineContainer(
                     i < tokens.size() - 1
-                    ? text.substring(token.getEndOffset(), tokens.get(i + 1).getStartOffset())
+                    ? text.substring(token.getEndOffset() + 1, tokens.get(i + 1).getStartOffset())
                     : text.substring(token.getEndOffset())
             );
+             */
         }
     }
 
@@ -89,13 +102,13 @@ public class EditorLine extends HBox {
         getChildren().add(createText(token.getContent(),
                 switch(token.getType()) {
                     case NUMBER_LITERAL:
-                        yield Color.BLUE;
+                        yield Color.color((double) 36 / 256, (double) 91 / 256, (double) 234 / 256);
                     case STRING_LITERAL:
                         yield Color.GREEN;
                     case KEYWORD:
-                        yield Color.RED;
+                        yield Color.color((double) 6 / 256, (double) 56 / 256, (double) 181 / 256);
                     default:
-                        yield Color.BLACK;
+                        yield Color.color((double) 17 / 256, (double) 17 / 256, (double) 17 / 256);
                 }));
     }
 
@@ -105,7 +118,7 @@ public class EditorLine extends HBox {
 
     private static Text createText(final String content, final Color color) {
         var t = new Text(content);
-        t.setFont(Font.font("SF Mono", 20));
+        t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 20));
         t.setFill(color);
         return t;
     }
