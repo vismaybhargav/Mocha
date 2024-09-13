@@ -53,10 +53,10 @@ public class EditorLine extends HBox {
 
         // We need to add the first bit before the first token in case the first token.startOffset() != 0
         if(!tokens.isEmpty()) {
-            getChildren().add(createText(text.substring(0, tokens.getFirst().getStartOffset()), null));
+            addStringToLineContainer(text.substring(0, tokens.getFirst().getStartOffset()));
         } else {
             // We need to just make it with the text if there are no tokens on a given line.
-            getChildren().add(createText(text, null));
+            addStringToLineContainer(text);
             return;
         }
 
@@ -64,21 +64,37 @@ public class EditorLine extends HBox {
         for(var i = 0; i < tokens.size(); i++) {
             var token = tokens.get(i);
 
-            if(i < tokens.size() - 1) {
-                getChildren().add(createText(token.getContent(), Color.RED));
-                getChildren().add(createText(text.substring(token.getEndOffset(), tokens.get(i + 1).getStartOffset()), null));
-            } else {
-                getChildren().add(createText(token.getContent(), Color.RED));
-                getChildren().add(createText(text.substring(token.getEndOffset()), null));
-            }
+            addTokenToLineContainer(token);
+            addStringToLineContainer(
+                    i < tokens.size() - 1
+                    ? text.substring(token.getEndOffset(), tokens.get(i + 1).getStartOffset())
+                    : text.substring(token.getEndOffset())
+            );
         }
+    }
+
+    private void addTokenToLineContainer(Token token) {
+        getChildren().add(createText(token.getContent(),
+                switch(token.getType()) {
+                    case NUMBER_LITERAL:
+                        yield Color.BLUE;
+                    case STRING_LITERAL:
+                        yield Color.GREEN;
+                    case KEYWORD:
+                        yield Color.RED;
+                    default:
+                        yield Color.BLACK;
+                }));
+    }
+
+    private void addStringToLineContainer(String string) {
+        getChildren().add(createText(string, Color.BLACK));
     }
 
     private static Text createText(final String content, final Color color) {
         var t = new Text(content);
         t.setFont(Font.font("SF Mono", 20));
-        if(color !=  null)
-            t.setFill(color);
+        t.setFill(color);
         return t;
     }
 }
