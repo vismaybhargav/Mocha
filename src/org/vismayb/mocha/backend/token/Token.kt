@@ -6,13 +6,10 @@ import java.io.File
 data class Token(val startOffset: Int, val endOffset: Int, val content: String, val type: TokenType) :
     Comparable<Token> {
     enum class TokenType {
-        INTEGER_LITERAL,
+        COMMENT,
+        NUMBER_LITERAL,
         STRING_LITERAL,
-        DECIMAL_LITERAL,
         KEYWORD,
-        OPERATOR,
-        WHITESPACE,
-        MISC
     }
 
     fun getLineNumber(file: File?): Int {
