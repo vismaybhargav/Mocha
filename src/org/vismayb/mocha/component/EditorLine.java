@@ -7,6 +7,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.vismayb.mocha.backend.lang.JavaLangConfigKt;
 import org.vismayb.mocha.backend.token.Token;
+import org.vismayb.mocha.backend.util.ColorHelperKt;
 
 import java.util.ArrayList;
 import java.util.Collections;
