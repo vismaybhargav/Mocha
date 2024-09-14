@@ -11,7 +11,6 @@ import org.vismayb.mocha.backend.util.ColorHelperKt;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,13 +43,50 @@ public class EditorLine extends HBox {
         }
     }
 
-    private void sortTokensWithPriority() {
-        Collections.sort(tokens);
-        tokens.sort(Comparator.comparingInt(this::getTokenPriority)
-                .thenComparing(Token::getStartOffset)
-        );
+    private void filterContainedTokensByPriority() {
+        // Basically the string and comment tokens
+        var highPriorityTokenIdxes = getTokenIndexesByType(Token.TokenType.COMMENT);
+        highPriorityTokenIdxes.addAll(getTokenIndexesByType(Token.TokenType.STRING_LITERAL));
+
+        // Remove the tokens if it is contained within a higherPriorityToken
+        // TODO: O(n^2) right now, check if we can make it faster
+        for(int i = 0; i < tokens.size(); i++) {
+            for (Integer highPriorityTokenIdx : highPriorityTokenIdxes) {
+                if (isContained(tokens.get(i), tokens.get(highPriorityTokenIdx))) {
+                    tokens.remove(i);
+                }
+            }
+        }
     }
 
+    private List<Integer> getTokenIndexesByType(Token.TokenType type) {
+        var typeTokens = new ArrayList<Integer>();
+
+        for (int i = 0; i < tokens.size(); i++) {
+            if(tokens.get(i).getType() == type) {
+                typeTokens.add(i);
+            }
+        }
+
+        return typeTokens;
+    }
+
+    /**
+     * Checks if a token is contained within another one.
+     * @param token1 the token that might be contained inside the other
+     * @param token2 the token that might contain the other token
+     * @return {@code true} if token1 is contained by token2
+     */
+    private boolean isContained(Token token1, Token token2) {
+        return (token1.getStartOffset() >= token2.getStartOffset()
+                && token1.getEndOffset() <= token2.getEndOffset());
+    }
+
+    /**
+     * Get the priority of token based on its {@link org.vismayb.mocha.backend.token.Token.TokenType TokenType}
+     * @param token token to check the priority of
+     * @return the priority of the token [0 (high) -> 4 (low)].
+     */
     private int getTokenPriority(final Token token) {
         return switch(token.getType()) {
             case Token.TokenType.COMMENT -> 0;
@@ -60,9 +96,13 @@ public class EditorLine extends HBox {
         };
     }
 
+    /**
+     * Generates the view for this editorLine
+     */
     private void generateView() {
         //sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
         //Collections.sort(tokens);
+        filterContainedTokensByPriority();
 
         // TODO:  Move the line numbers outside of the Editor into its own separate component.
         //getChildren().add(createText(Integer.toString(lineNumber), null));
@@ -92,6 +132,10 @@ public class EditorLine extends HBox {
         }
     }
 
+    /**
+     * Adds the token to the line container view with custom colors
+     * @param token token to be added to the line container view
+     */
     private void addTokenToLineContainer(Token token) {
         getChildren().add(createText(token.getContent(),
                 switch(token.getType()) {
@@ -107,10 +151,20 @@ public class EditorLine extends HBox {
         );
     }
 
-    private void addStringToLineContainer(String string) {
+    /**
+     * Adds a string to the lineContainer view
+     * @param string string to be added to the lineContainer view
+     */
+    private void addStringToLineContainer(final String string) {
         getChildren().add(createText(string, Color.BLACK));
     }
 
+    /**
+     * Creates a text object with custom parameters
+     * @param content string content of the text object
+     * @param color color of the text
+     * @return the text object
+     */
     private static Text createText(final String content, final Color color) {
         var t = new Text(content);
         t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 20));
