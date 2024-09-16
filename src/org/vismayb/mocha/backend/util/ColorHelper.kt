@@ -11,8 +11,8 @@ import javafx.scene.paint.Color
 fun generateColor(red: Int, blue: Int, green: Int, alpha: Int): Color {
     return Color.color(
         getNormalizedColorValue(red),
-        getNormalizedColorValue(blue),
         getNormalizedColorValue(green),
+        getNormalizedColorValue(blue),
         getNormalizedColorValue(alpha)
     )
 }
@@ -22,11 +22,11 @@ fun generateColor(red: Int, blue: Int, green: Int, alpha: Int): Color {
  * @param blue blue value [0, 256)
  * @param green green value [0, 256)
  */
-fun generateColor(red: Int, blue: Int, green: Int): Color {
+fun generateColor(red: Int, green: Int, blue: Int): Color {
     return Color.color(
         getNormalizedColorValue(red),
-        getNormalizedColorValue(blue),
         getNormalizedColorValue(green),
+        getNormalizedColorValue(blue),
     )
 }
 
@@ -34,13 +34,12 @@ fun generateColor(red: Int, blue: Int, green: Int): Color {
  * @param color Color
  */
 fun getHexString(color: Color): String {
-    //TODO: Implement hex color parsing
+    var hex = "#"
+    //hex += color.
     throw NotImplementedError()
 }
 
 /**
  * @param value a rgba value of a color [0, 256)
  */
-private fun getNormalizedColorValue(value: Int): Double {
-    return (value / 256).toDouble();
-}
+private fun getNormalizedColorValue(value: Int): Double = (value / 255.0)
