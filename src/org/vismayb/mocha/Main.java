@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import org.vismayb.mocha.backend.util.FileUtil;
-import org.vismayb.mocha.component.TextFileEditor;
+import org.vismayb.mocha.frontend.component.TextFileEditor;
 
 import java.io.File;
 
