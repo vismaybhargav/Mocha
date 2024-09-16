@@ -1,4 +1,4 @@
-package org.vismayb.mocha.component;
+package org.vismayb.mocha.frontend.component;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -7,6 +7,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import org.vismayb.mocha.backend.util.ColorHelperKt;
 import org.vismayb.mocha.backend.util.FileUtil;
 
 import java.io.File;
@@ -33,8 +36,17 @@ public class TextFileEditor extends ScrollPane {
         // Initialize the buffer before because we don't want to do extra checks in other methods.
         buffer = FileUtil.getAllLinesAsStringBuilder(file);
 
+        for(int i =  0; i < lines.size(); i++) {
+            var t = new Text(Integer.toString(i + 1));
+            t.setFont(Font.font("JetBrains Mono", 20));
+            gutter.getChildren().add(t);
+        }
+
+        lineContainer.setBackground(Background.fill(ColorHelperKt.generateColor(30, 31, 34)));
+        //lineContainer.setBackground(Background.fill(Color.GREEN));
+
         HBox hbox = new HBox();
-        hbox.getChildren().add(lineContainer);
+        hbox.getChildren().addAll(gutter, lineContainer);
         hbox.setSpacing(10);
         setContent(hbox);
 

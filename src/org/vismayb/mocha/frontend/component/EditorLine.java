@@ -1,4 +1,4 @@
-package org.vismayb.mocha.component;
+package org.vismayb.mocha.frontend.component;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -31,9 +31,9 @@ public class EditorLine extends HBox {
 
     public void tokenizeString() {
         // TODO: Add separation for primitive types.
-
         matchAllTokens(JavaLangConfigKt.getKeywordPattern(), Token.TokenType.KEYWORD);
-        matchAllTokens(JavaLangConfigKt.getNumberPattern(), Token.TokenType.NUMBER_LITERAL);
+        matchAllTokens(JavaLangConfigKt.getNumberPattern(),  Token.TokenType.NUMBER_LITERAL);
+        matchAllTokens(JavaLangConfigKt.getSingleCommentPattern(), Token.TokenType.COMMENT);
     }
 
     private void matchAllTokens(final Pattern pattern, final Token.TokenType tokenType) {
@@ -101,11 +101,14 @@ public class EditorLine extends HBox {
      */
     private void generateView() {
         //sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
-        //Collections.sort(tokens);
+
         filterContainedTokensByPriority();
+        Collections.sort(tokens);
 
         // TODO:  Move the line numbers outside of the Editor into its own separate component.
         //getChildren().add(createText(Integer.toString(lineNumber), null));
+
+        System.out.println("" + tokens);
 
         // We need to add the first bit before the first token in case the first token.startOffset() != 0
         if(!tokens.isEmpty()) {
@@ -146,7 +149,7 @@ public class EditorLine extends HBox {
                     case KEYWORD:
                         yield ColorHelperKt.generateColor(6, 56, 181);
                     default:
-                        yield ColorHelperKt.generateColor(17, 17, 17);
+                        yield ColorHelperKt.generateColor(187, 189, 180);
                 })
         );
     }
@@ -156,7 +159,7 @@ public class EditorLine extends HBox {
      * @param string string to be added to the lineContainer view
      */
     private void addStringToLineContainer(final String string) {
-        getChildren().add(createText(string, Color.BLACK));
+        getChildren().add(createText(string, ColorHelperKt.generateColor(187, 189, 180)));
     }
 
     /**
