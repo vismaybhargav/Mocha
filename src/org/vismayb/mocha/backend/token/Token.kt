@@ -32,6 +32,8 @@ data class Token(val startOffset: Int, val endOffset: Int, val content: String, 
         return -1 // Never found ig?
     }
 
+    fun isContained(other: Token): Boolean = (startOffset >= other.startOffset && endOffset <= other.endOffset)
+
     override fun compareTo(other: Token): Int {
         return startOffset - other.startOffset
     }
