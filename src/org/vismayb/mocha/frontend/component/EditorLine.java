@@ -7,7 +7,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.vismayb.mocha.backend.lang.JavaLangConfigKt;
 import org.vismayb.mocha.backend.token.Token;
-import org.vismayb.mocha.backend.util.ColorHelperKt;
+import org.vismayb.mocha.frontend.util.ColorHelperKt;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,6 @@ public class EditorLine extends HBox {
         highPriorityTokenIdxes.addAll(getTokenIndexesByType(Token.TokenType.STRING_LITERAL));
 
         // Remove the tokens if it is contained within a higherPriorityToken
-        // TODO: O(n^2) right now, check if we can make it faster
         for(int i = 0; i < tokens.size(); i++) {
             for (Integer highPriorityTokenIdx : highPriorityTokenIdxes) {
                 if (isContained(tokens.get(i), tokens.get(highPriorityTokenIdx))) {

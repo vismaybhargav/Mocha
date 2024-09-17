@@ -9,8 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import org.vismayb.mocha.backend.util.ColorHelperKt;
 import org.vismayb.mocha.backend.util.FileUtil;
+import org.vismayb.mocha.frontend.util.ColorHelperKt;
 
 import java.io.File;
 import java.util.ArrayList;

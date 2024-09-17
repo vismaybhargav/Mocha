@@ -15,7 +15,6 @@ import java.io.File;
 
 public class Main extends Application {
     private final BorderPane bPane = new BorderPane();
-    private StringBuilder sb;
     private File fileToEdit;
     private TextFileEditor textFileEditor;
 
