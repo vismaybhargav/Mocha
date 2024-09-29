@@ -1,4 +1,4 @@
-package org.vismayb.mocha.backend.lang
+package org.vismayb.mocha.backend.polyglot.lang
 
 import org.vismayb.mocha.backend.util.generateKeywordPattern
 import java.util.regex.Pattern

@@ -1,11 +1,12 @@
 package org.vismayb.mocha.frontend.component;
 
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.vismayb.mocha.backend.lang.JavaLangConfigKt;
+import org.vismayb.mocha.backend.polyglot.lang.JavaLangConfigKt;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.frontend.util.ColorHelperKt;
 
@@ -19,12 +20,16 @@ public class EditorLine extends HBox {
     private final String text;
     private final List<Token> tokens;
 
-    public EditorLine(final String text, final int lineNumber) {
-        this.text = text;
-        tokens = new ArrayList<>();
+    public EditorLine(final String text) {
+        this(text, new ArrayList<>());
+    }
 
-        tokenizeString();
+    public EditorLine(final String text, final List<Token> tokens) {
+        this.text = text;
+        this.tokens = tokens;
+
         generateView();
+        HBox.setHgrow(this, Priority.ALWAYS);
     }
 
     // TODO: Move over to the backend at some point
@@ -51,7 +56,7 @@ public class EditorLine extends HBox {
         // Remove the tokens if it is contained within a higherPriorityToken
         for(int i = 0; i < tokens.size(); i++) {
             for (Integer highPriorityTokenIdx : highPriorityTokenIdxes) {
-                if (isContained(tokens.get(i), tokens.get(highPriorityTokenIdx))) {
+                if(tokens.get(i).isContainedWithin(tokens.get(highPriorityTokenIdx))) {
                     tokens.remove(i);
                 }
             }
@@ -71,37 +76,12 @@ public class EditorLine extends HBox {
     }
 
     /**
-     * Checks if a token is contained within another one.
-     * @param token1 the token that might be contained inside the other
-     * @param token2 the token that might contain the other token
-     * @return {@code true} if token1 is contained by token2
-     */
-    private boolean isContained(Token token1, Token token2) {
-        return (token1.getStartOffset() >= token2.getStartOffset()
-                && token1.getEndOffset() <= token2.getEndOffset());
-    }
-
-    /**
-     * Get the priority of token based on its {@link org.vismayb.mocha.backend.token.Token.TokenType TokenType}
-     * @param token token to check the priority of
-     * @return the priority of the token [0 (high) -> 4 (low)].
-     */
-    private int getTokenPriority(final Token token) {
-        return switch(token.getType()) {
-            case Token.TokenType.COMMENT -> 0;
-            case Token.TokenType.STRING_LITERAL -> 1;
-            case Token.TokenType.NUMBER_LITERAL -> 2;
-            case Token.TokenType.KEYWORD -> 3;
-        };
-    }
-
-    /**
      * Generates the view for this editorLine
      */
     private void generateView() {
         //sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
 
-        filterContainedTokensByPriority();
+        //filterContainedTokensByPriority();
         Collections.sort(tokens);
 
         // TODO:  Move the line numbers outside of the Editor into its own separate component.
@@ -142,11 +122,11 @@ public class EditorLine extends HBox {
         getChildren().add(createText(token.getContent(),
                 switch(token.getType()) {
                     case NUMBER_LITERAL:
-                        yield ColorHelperKt.generateColor(36, 91, 234);
+                        yield ColorHelperKt.generateColor(215, 199, 129);
                     case STRING_LITERAL:
                         yield Color.GREEN;
                     case KEYWORD:
-                        yield ColorHelperKt.generateColor(6, 56, 181);
+                        yield ColorHelperKt.generateColor(249, 122, 176);
                     default:
                         yield ColorHelperKt.generateColor(187, 189, 180);
                 })
@@ -158,7 +138,7 @@ public class EditorLine extends HBox {
      * @param string string to be added to the lineContainer view
      */
     private void addStringToLineContainer(final String string) {
-        getChildren().add(createText(string, ColorHelperKt.generateColor(187, 189, 180)));
+        getChildren().add(createText(string, ColorHelperKt.generateColor(223 , 223, 223)));
     }
 
     /**
@@ -169,7 +149,7 @@ public class EditorLine extends HBox {
      */
     private static Text createText(final String content, final Color color) {
         var t = new Text(content);
-        t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 20));
+        t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 15));
         t.setFill(color);
         return t;
     }
