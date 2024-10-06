@@ -9,13 +9,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import org.vismayb.mocha.backend.util.FileUtil;
-import org.vismayb.mocha.component.TextFileEditor;
+import org.vismayb.mocha.frontend.component.TextFileEditor;
 
 import java.io.File;
 
 public class Main extends Application {
     private final BorderPane bPane = new BorderPane();
-    private StringBuilder sb;
     private File fileToEdit;
     private TextFileEditor textFileEditor;
 
