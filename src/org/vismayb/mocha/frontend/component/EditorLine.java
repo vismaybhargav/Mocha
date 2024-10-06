@@ -28,6 +28,7 @@ public class EditorLine extends HBox {
         this.text = text;
         this.tokens = tokens;
 
+        tokenizeString();
         generateView();
         HBox.setHgrow(this, Priority.ALWAYS);
     }
@@ -81,7 +82,7 @@ public class EditorLine extends HBox {
     private void generateView() {
         //sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
 
-        //filterContainedTokensByPriority();
+        filterContainedTokensByPriority();
         Collections.sort(tokens);
 
         // TODO:  Move the line numbers outside of the Editor into its own separate component.

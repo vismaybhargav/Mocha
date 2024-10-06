@@ -57,7 +57,7 @@ public class TextFileEditor extends ScrollPane {
 
         for(int i = 0; i < lines.size(); i++) {
             var tokensInLine = model.getTokensByLineNumber(i);
-            EditorLine line = new EditorLine(lines.get(i), tokensInLine);
+            EditorLine line = new EditorLine(lines.get(i));
             lineContainer.getChildren().add(line);
         }
     }
