@@ -4,6 +4,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.vismayb.mocha.backend.polyglot.lang.JavaLangConfigKt;
@@ -26,6 +27,7 @@ public class EditorLine extends HBox {
 
     public EditorLine(final String text, final List<Token> tokens) {
         this.text = text;
+        System.out.println(text.isEmpty());
         this.tokens = tokens;
 
         tokenizeString();
@@ -37,15 +39,15 @@ public class EditorLine extends HBox {
 
     public void tokenizeString() {
         // TODO: Add separation for primitive types.
-        matchAllTokens(JavaLangConfigKt.getKeywordPattern(), Token.TokenType.KEYWORD);
-        matchAllTokens(JavaLangConfigKt.getNumberPattern(),  Token.TokenType.NUMBER_LITERAL);
-        matchAllTokens(JavaLangConfigKt.getSingleCommentPattern(), Token.TokenType.COMMENT);
+        matchAllTokens(JavaLangConfigKt.getKeywordPattern(), Token.TokenType.KEYWORD, 0);
+        matchAllTokens(JavaLangConfigKt.getNumberPattern(),  Token.TokenType.NUMBER_LITERAL, 0);
+        matchAllTokens(JavaLangConfigKt.getSingleCommentPattern(), Token.TokenType.COMMENT, 0);
     }
 
-    private void matchAllTokens(final Pattern pattern, final Token.TokenType tokenType) {
+    private void matchAllTokens(final Pattern pattern, final Token.TokenType tokenType, final int lineNumber) {
         Matcher matcher = pattern.matcher(text);
         while(matcher.find()) {
-            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), tokenType));
+            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), tokenType, lineNumber));
         }
     }
 
@@ -85,10 +87,7 @@ public class EditorLine extends HBox {
         filterContainedTokensByPriority();
         Collections.sort(tokens);
 
-        // TODO:  Move the line numbers outside of the Editor into its own separate component.
-        //getChildren().add(createText(Integer.toString(lineNumber), null));
-
-        System.out.println("" + tokens);
+        System.out.println("tokens: " + tokens);
 
         // We need to add the first bit before the first token in case the first token.startOffset() != 0
         if(!tokens.isEmpty()) {
@@ -99,6 +98,7 @@ public class EditorLine extends HBox {
             return;
         }
 
+        System.out.println(text.isEmpty());
         // Insert each token's contents in between the last token and the curr token.
         for(var i = 0; i < tokens.size(); i++) {
             var token = tokens.get(i);
@@ -152,6 +152,7 @@ public class EditorLine extends HBox {
         var t = new Text(content);
         t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 15));
         t.setFill(color);
+        t.setFontSmoothingType(FontSmoothingType.LCD);
         return t;
     }
 }

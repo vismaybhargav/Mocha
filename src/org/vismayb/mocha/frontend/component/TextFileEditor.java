@@ -53,11 +53,13 @@ public class TextFileEditor extends ScrollPane {
      */
     public void recreateFileView() {
         lineContainer.getChildren().clear();
-        //TODO: Refresh the model over her
+        //TODO: Refresh the model over here
 
-        for(int i = 0; i < lines.size(); i++) {
+        System.out.println(model.getLines().get(0));
+        for(int i = 0; i <= model.getLines().size(); i++) {
             var tokensInLine = model.getTokensByLineNumber(i);
-            EditorLine line = new EditorLine(lines.get(i));
+            System.out.println(model.getLines().get(i));
+            EditorLine line = new EditorLine(model.getLines().get(i));
             lineContainer.getChildren().add(line);
         }
     }
