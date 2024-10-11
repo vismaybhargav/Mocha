@@ -3,6 +3,7 @@ package org.vismayb.mocha.backend.model
 import org.vismayb.mocha.backend.polyglot.lang.keywordPattern
 import org.vismayb.mocha.backend.polyglot.lang.numberPattern
 import org.vismayb.mocha.backend.polyglot.lang.singleCommentPattern
+import org.vismayb.mocha.backend.polyglot.lang.stringPattern
 
 import org.vismayb.mocha.backend.token.Token
 
@@ -13,8 +14,8 @@ import java.util.regex.Pattern
 class EditorModel(private val file: File) {
     val id: String = UUID.randomUUID().toString()
     private var tokens: MutableList<Token> = mutableListOf()
-    private lateinit var text: String
-    lateinit var lines: List<String>
+    private var text: String = file.useLines { it.joinToString("\n") } // Does this even work?
+    var lines: List<String> = file.readLines() // Use a more robust approach
 
     init {
         tokenizeFile()
@@ -33,6 +34,7 @@ class EditorModel(private val file: File) {
             matchAllTokens(it, keywordPattern,       Token.TokenType.KEYWORD,        i)
             matchAllTokens(it, numberPattern,        Token.TokenType.NUMBER_LITERAL, i)
             matchAllTokens(it, singleCommentPattern, Token.TokenType.COMMENT,        i)
+            matchAllTokens(it, stringPattern,        Token.TokenType.STRING_LITERAL, i)
             i++
         }
     }
@@ -68,7 +70,8 @@ class EditorModel(private val file: File) {
         // Remove those tokens if they are contained within the higher priority token
         sortedIndicies.forEach { idx ->
             tokens.removeIf { token ->
-                token.isContainedWithin(tokens[idx])
+                token.type.getTypePriority() < Token.TokenType.STRING_LITERAL.getTypePriority()
+                        && token.isContainedWithin(tokens[idx])
             }
         }
 
