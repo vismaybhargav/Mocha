@@ -1,4 +1,4 @@
-package org.vismayb.mocha.frontend.util
+package org.vismayb.mocha.view.util
 
 import javafx.scene.paint.Color
 

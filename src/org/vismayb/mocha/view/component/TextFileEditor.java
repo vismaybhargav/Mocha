@@ -1,4 +1,4 @@
-package org.vismayb.mocha.frontend.component;
+package org.vismayb.mocha.view.component;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
@@ -7,7 +7,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import org.vismayb.mocha.backend.model.EditorModel;
-import org.vismayb.mocha.frontend.util.ColorHelperKt;
+import org.vismayb.mocha.view.util.ColorHelperKt;
 
 import java.io.File;
 
@@ -51,13 +51,13 @@ public class TextFileEditor extends ScrollPane {
      */
     public void recreateFileView() {
         lineContainer.getChildren().clear();
+
         //TODO: Refresh the model over here
 
-        System.out.println(model.getLines().get(0));
-        for(int i = 0; i <= model.getLines().size(); i++) {
+        // This for loops bound should never be changed as it would affect the sync between model and view
+        for(int i = 0; i < model.getLines().size(); i++) {
             var tokensInLine = model.getTokensByLineNumber(i);
-            System.out.println(model.getLines().get(i));
-            EditorLine line = new EditorLine(model.getLines().get(i), tokensInLine);
+            EditorLine line = new EditorLine(model.getLines().get(i), tokensInLine, i + 1);
             lineContainer.getChildren().add(line);
         }
     }
