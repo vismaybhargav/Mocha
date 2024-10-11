@@ -20,17 +20,17 @@ import java.util.regex.Pattern;
 public class EditorLine extends HBox {
     private final String text;
     private final List<Token> tokens;
+    private final int lineNumber;
 
-    public EditorLine(final String text) {
-        this(text, new ArrayList<>());
+    public EditorLine(final String text, final int lineNumber) {
+        this(text, new ArrayList<>(), lineNumber);
     }
 
-    public EditorLine(final String text, final List<Token> tokens) {
+    public EditorLine(final String text, final List<Token> tokens, final int lineNumber) {
         this.text = text;
-        System.out.println(text.isEmpty());
         this.tokens = tokens;
+        this.lineNumber = lineNumber;
 
-        tokenizeString();
         generateView();
         HBox.setHgrow(this, Priority.ALWAYS);
     }
@@ -84,7 +84,6 @@ public class EditorLine extends HBox {
     private void generateView() {
         //sortTokensWithPriority(); // To get a sequential list of all the tokens as they appear in the file
 
-        filterContainedTokensByPriority();
         Collections.sort(tokens);
 
         System.out.println("tokens: " + tokens);
@@ -125,7 +124,7 @@ public class EditorLine extends HBox {
                     case NUMBER_LITERAL:
                         yield ColorHelperKt.generateColor(215, 199, 129);
                     case STRING_LITERAL:
-                        yield Color.GREEN;
+                        yield ColorHelperKt.generateColor(255, 127, 108);
                     case KEYWORD:
                         yield ColorHelperKt.generateColor(249, 122, 176);
                     default:
