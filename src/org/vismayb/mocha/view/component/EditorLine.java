@@ -30,7 +30,7 @@ public class EditorLine extends HBox implements Loggable {
 
         generateView();
         HBox.setHgrow(this, Priority.ALWAYS);
-        performLogging();
+        log();
     }
 
     /**
@@ -107,7 +107,7 @@ public class EditorLine extends HBox implements Loggable {
     }
 
     @Override
-    public void log() {
+    public void logImpl() {
         System.out.println("Line " + lineNumber);
         System.out.println("Text: " + (text.isEmpty() ? "EMPTY" : text)); // Just for convenience’s sake
         System.out.println("Tokens: " + tokens);
