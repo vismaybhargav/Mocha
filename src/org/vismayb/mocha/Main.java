@@ -19,6 +19,7 @@ public class Main extends Application {
     private TextFileEditor textFileEditor;
 
     public static void main(String[] args) {
+        GlobalConstants.Companion.setLoggingEnabled(Boolean.parseBoolean(args[0]));
         launch(args);
     }
 

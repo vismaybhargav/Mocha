@@ -7,17 +7,16 @@ package org.vismayb.mocha;
  */
 public interface Loggable {
     /**
-     * Calls {@link Loggable#logImpl()} only if dev logging is enabled by {@link GlobalConstants#LOGGING_ENABLED}
+     * Calls {@link Loggable#logImpl()} only if dev logging is enabled by {@link GlobalConstants#loggingEnabled}
      */
     default void log() {
-        if (GlobalConstants.LOGGING_ENABLED) {
+        if (GlobalConstants.Companion.getLoggingEnabled()) {
             logImpl();
         }
     }
 
     /**
-     * Implementation of the logging. Should use print statements to print out necessary details in a
-     * nice to look at manner.
+     * Implementation of the logging. Should use print statements to print out necessary details in a readable manner.
      */
     void logImpl();
 }
