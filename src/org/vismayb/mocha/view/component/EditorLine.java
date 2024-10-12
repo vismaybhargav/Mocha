@@ -35,49 +35,6 @@ public class EditorLine extends HBox {
         HBox.setHgrow(this, Priority.ALWAYS);
     }
 
-    // TODO: Move over to the backend at some point
-
-    public void tokenizeString() {
-        // TODO: Add separation for primitive types.
-        matchAllTokens(JavaLangConfigKt.getKeywordPattern(), Token.TokenType.KEYWORD, 0);
-        matchAllTokens(JavaLangConfigKt.getNumberPattern(), Token.TokenType.NUMBER_LITERAL, 0);
-        matchAllTokens(JavaLangConfigKt.getSingleCommentPattern(), Token.TokenType.COMMENT, 0);
-    }
-
-    private void matchAllTokens(final Pattern pattern, final Token.TokenType tokenType, final int lineNumber) {
-        Matcher matcher = pattern.matcher(text);
-        while (matcher.find()) {
-            tokens.add(new Token(matcher.start(), matcher.end(), matcher.group(), tokenType, lineNumber));
-        }
-    }
-
-    private void filterContainedTokensByPriority() {
-        // Basically the string and comment tokens
-        var highPriorityTokenIdxes = getTokenIndexesByType(Token.TokenType.COMMENT);
-        highPriorityTokenIdxes.addAll(getTokenIndexesByType(Token.TokenType.STRING_LITERAL));
-
-        // Remove the tokens if it is contained within a higherPriorityToken
-        for (int i = 0; i < tokens.size(); i++) {
-            for (Integer highPriorityTokenIdx : highPriorityTokenIdxes) {
-                if (tokens.get(i).isContainedWithin(tokens.get(highPriorityTokenIdx))) {
-                    tokens.remove(i);
-                }
-            }
-        }
-    }
-
-    private List<Integer> getTokenIndexesByType(Token.TokenType type) {
-        var typeTokens = new ArrayList<Integer>();
-
-        for (int i = 0; i < tokens.size(); i++) {
-            if (tokens.get(i).getType() == type) {
-                typeTokens.add(i);
-            }
-        }
-
-        return typeTokens;
-    }
-
     /**
      * Generates the view for this editorLine
      */
@@ -141,12 +98,6 @@ public class EditorLine extends HBox {
      */
     private void addStringToLineContainer(final String string) {
         getChildren().add(createText(string, ColorHelperKt.generateColor(223, 223, 223)));
-    }
-
-    private void log() {
-        System.out.println("======");
-        System.out.println("LINE: " + lineNumber);
-        
     }
 
     /**
