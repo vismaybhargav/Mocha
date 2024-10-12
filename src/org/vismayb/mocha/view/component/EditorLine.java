@@ -7,17 +7,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.vismayb.mocha.backend.polyglot.lang.JavaLangConfigKt;
+import org.vismayb.mocha.Loggable;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.view.util.ColorHelperKt;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class EditorLine extends HBox {
+public class EditorLine extends HBox implements Loggable {
     private final String text;
     private final List<Token> tokens;
     private final int lineNumber;
@@ -33,21 +30,15 @@ public class EditorLine extends HBox {
 
         generateView();
         HBox.setHgrow(this, Priority.ALWAYS);
+        log();
     }
 
     /**
      * Generates the view for this editorLine
      */
     private void generateView() {
-        // sortTokensWithPriority(); // To get a sequential list of all the tokens as
-        // they appear in the file
-
-        // filterContainedTokensByPriority();
-        Collections.sort(tokens);
-
-        System.out.println("tokens: " + tokens);
-
         // We need to add the first bit before the first token in case the first token.startOffset() != 0
+
         if(!tokens.isEmpty()) {
             addStringToLineContainer(text.substring(0, tokens.getFirst().getStartOffset()));
         } else {
@@ -56,7 +47,6 @@ public class EditorLine extends HBox {
             return;
         }
 
-        System.out.println(text.isEmpty());
         // Insert each token's contents in between the last token and the curr token.
         for (var i = 0; i < tokens.size(); i++) {
             var token = tokens.get(i);
@@ -88,7 +78,8 @@ public class EditorLine extends HBox {
                         yield ColorHelperKt.generateColor(249, 122, 176);
                     default:
                         yield ColorHelperKt.generateColor(187, 189, 180);
-                }));
+                })
+        );
     }
 
     /**
@@ -113,5 +104,13 @@ public class EditorLine extends HBox {
         t.setFill(color);
         t.setFontSmoothingType(FontSmoothingType.LCD);
         return t;
+    }
+
+    @Override
+    public void logImpl() {
+        System.out.println("Line " + lineNumber);
+        System.out.println("Text: " + (text.isEmpty() ? "EMPTY" : text)); // Just for convenience’s sake
+        System.out.println("Tokens: " + tokens);
+        System.out.println("====================================================");
     }
 }
