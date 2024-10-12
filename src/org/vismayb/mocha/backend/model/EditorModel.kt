@@ -3,6 +3,7 @@ package org.vismayb.mocha.backend.model
 import org.vismayb.mocha.backend.polyglot.lang.keywordPattern
 import org.vismayb.mocha.backend.polyglot.lang.numberPattern
 import org.vismayb.mocha.backend.polyglot.lang.singleCommentPattern
+import org.vismayb.mocha.backend.polyglot.lang.stringPattern
 
 import org.vismayb.mocha.backend.token.Token
 
@@ -13,7 +14,8 @@ import java.util.regex.Pattern
 class EditorModel(private val file: File) {
     val id: String = UUID.randomUUID().toString()
     private var tokens: MutableList<Token> = mutableListOf()
-    private var text: String = file.readText()
+    private var text: String = file.useLines { it.joinToString("\n") } // Does this even work?
+    var lines: List<String> = file.readLines() // Use a more robust approach
 
     init {
         tokenizeFile()
@@ -26,21 +28,28 @@ class EditorModel(private val file: File) {
      */
     private fun tokenizeFile(){
         // TODO: Add separation for primitive types
-        matchAllTokens(keywordPattern,       Token.TokenType.KEYWORD)
-        matchAllTokens(numberPattern,        Token.TokenType.NUMBER_LITERAL)
-        matchAllTokens(singleCommentPattern, Token.TokenType.COMMENT)
+
+        var i = 0
+        file.forEachLine {
+            matchAllTokens(it, keywordPattern,       Token.TokenType.KEYWORD,        i)
+            matchAllTokens(it, numberPattern,        Token.TokenType.NUMBER_LITERAL, i)
+            matchAllTokens(it, singleCommentPattern, Token.TokenType.COMMENT,        i)
+            matchAllTokens(it, stringPattern,        Token.TokenType.STRING_LITERAL, i)
+            i++
+        }
     }
 
     /**
      * Matches all the tokens based on the pattern and tokenType. (Adds to the token array)
      * @param pattern Pattern to match
      * @param tokenType type of the token that is being matched
+     * @param text text to match
      */
-    private fun matchAllTokens(pattern: Pattern, tokenType: Token.TokenType) {
+    private fun matchAllTokens(text: String, pattern: Pattern, tokenType: Token.TokenType, lineNumber: Int) {
         val matcher = pattern.matcher(text)
 
         while(matcher.find()) {
-            tokens.add(Token(matcher.start(), matcher.end(), matcher.group(), tokenType))
+            tokens.add(Token(matcher.start(), matcher.end(), matcher.group(), tokenType, lineNumber))
         }
     }
 
@@ -56,10 +65,13 @@ class EditorModel(private val file: File) {
             getTokenIndexesByType(Token.TokenType.STRING_LITERAL)
         )
 
+        val sortedIndicies = highPriorityIdxes.sortedDescending()
+
         // Remove those tokens if they are contained within the higher priority token
-        highPriorityIdxes.forEach { idx ->
+        sortedIndicies.forEach { idx ->
             tokens.removeIf { token ->
-                token.isContainedWithin(tokens[idx])
+                token.type.getTypePriority() < Token.TokenType.STRING_LITERAL.getTypePriority()
+                        && token.isContainedWithin(tokens[idx])
             }
         }
 
@@ -94,6 +106,6 @@ class EditorModel(private val file: File) {
     }
 
     fun getTokensByLineNumber(lineNumber: Int): List<Token> {
-        return tokens.filter { it.getLineNumber(file) == lineNumber }
+        return tokens.filter { it.lineNumber == lineNumber }
     }
 }

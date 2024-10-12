@@ -1,4 +1,4 @@
-package org.vismayb.mocha.frontend.component;
+package org.vismayb.mocha.view.component;
 
 import javafx.geometry.Point2D;
 

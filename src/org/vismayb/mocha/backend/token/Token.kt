@@ -10,7 +10,8 @@ data class Token (
     val startOffset: Int,
     val endOffset: Int,
     val content: String,
-    val type: TokenType
+    val type: TokenType,
+    val lineNumber: Int
 ) : Comparable<Token> {
 
     /** EACH CASE IN THE ENUM HAS TO BE PLACED IN ORDER OF THEIR PRIORITY */
@@ -29,30 +30,6 @@ data class Token (
         fun getTypePriority(): Int {
             return ordinal
         }
-    }
-
-    /**
-     * Gets the lineNumber of the file that this token is on.
-     * @param file the file that this token is inside
-     */
-    fun getLineNumber(file: File?): Int {
-        val lines: List<String> = FileUtil.getAllLines(file)
-
-        var currentOffset = 0
-        var lineNumber = 1
-
-        for (line in lines) {
-            val lineLength = line.length + 1 // Include the "\n"
-
-            if (currentOffset + lineLength > endOffset) {
-                return lineNumber
-            }
-
-            currentOffset += lineLength
-            lineNumber++
-        }
-
-        return -1 // Never found ig?
     }
 
     /**
