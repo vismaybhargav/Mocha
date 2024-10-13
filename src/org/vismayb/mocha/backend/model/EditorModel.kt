@@ -65,27 +65,15 @@ class EditorModel(private val file: File) {
             getTokenIndexesByType(Token.TokenType.STRING_LITERAL)
         )
 
-        val sortedIndicies = highPriorityIdxes.sortedDescending()
+        val sortedIndices = highPriorityIdxes.sortedDescending()
 
         // Remove those tokens if they are contained within the higher priority token
-        sortedIndicies.forEach { idx ->
+        sortedIndices.forEach { idx ->
             tokens.removeIf { token ->
                 token.type.getTypePriority() < Token.TokenType.STRING_LITERAL.getTypePriority()
                         && token.isContainedWithin(tokens[idx])
             }
         }
-
-        /*
-        tokens.removeIf { tokens.isContainedWithin(highPriorityIdxes.) }
-        for (i in tokens.indices) {
-            for (j in highPriorityIdxes) {
-                if (tokens[i].isContainedWithin(tokens[j])) {
-                    tokens.removeAt(i)
-                    continue
-                }
-            }
-        }
-         */
     }
 
     /**
