@@ -12,7 +12,7 @@ private val keywords: Array<String> = arrayOf(
     "package", "private", "protected", "public", "return",
     "static", "strictfp", "super", "switch", "synchronized", "this",
     "throw", "throws", "transient", "try", "volatile",
-    "while"
+    "while", "var"
 )
 
 val primitiveTypes: Array<String> = arrayOf(
@@ -32,4 +32,4 @@ val stringPattern: Pattern = Pattern.compile("\"(?:\\\\.|[^\"\\\\])*\"");
 /**
  * Works with +/-, f/F, l/L, decimals and integers. OPEN-AI o1 is SO SMART!!
  */
-val numberPattern: Pattern = Pattern.compile("[+-]?(?:\\d+\\.?\\d*|\\.\\d+)[fFlL]?")
+val numberPattern: Pattern = Pattern.compile("([-]?(\\d+(\\.\\d+)?|\\.\\d+)[FfLl]?)")
