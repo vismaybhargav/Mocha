@@ -7,9 +7,9 @@ public class Test {
     private static final long nanoseconds = -23423424324L;
 
     public static void main(String[] args) {
-        System.out.println("String Literal");
+        System.out.println("String var Literal");
 
-        // Here is a comment that is single line
+        // Here is a comment that is single line for if let var
         Arrays.stream(args).anyMatch("Hi!"::equals);
 
         new String().length();
@@ -20,6 +20,7 @@ public class Test {
 
     /**
      * Prints a triangle according to certain requirements
+     * for if let var
      * @param base base width of the triangle
      * @return -1
      */
@@ -33,6 +34,7 @@ public class Test {
 
         /*
          *  Here is a multi-line comment
+         * for if let var
          */
         return (int)-1.0;
     }

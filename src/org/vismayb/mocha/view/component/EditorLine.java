@@ -31,9 +31,9 @@ public class EditorLine extends HBox implements Loggable {
         this.tokens = tokens;
         this.lineNumber = lineNumber;
 
+        log();
         generateView();
         HBox.setHgrow(this, Priority.ALWAYS);
-        log();
     }
 
     /**
