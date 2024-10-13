@@ -33,6 +33,11 @@ public class Main extends Application {
         bPane.setTop(mBar);
         Scene scene = new Scene(bPane);
 
+        if(GlobalConstants.Companion.getDefaultFile() != null) {
+            textFileEditor = new TextFileEditor(GlobalConstants.Companion.getDefaultFile());
+            bPane.setCenter(textFileEditor);
+        }
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
