@@ -104,19 +104,22 @@ public class EditorLine extends HBox implements Loggable {
      * @return the text object
      */
     private static Text createText(final String content, final Color color) {
+        // Create the text object with some sensible defaults
+        // TODO: Should be controlled by passing in settings.
         var t = new Text(content);
         t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 15));
         t.setFill(color);
         t.setFontSmoothingType(FontSmoothingType.LCD);
 
+        // This part should probably not be in this because its a "component"
+        // but im guessing it should be fine cuz can just remove the cli functionality
         if(!GlobalConstants.Companion.getDevMode()) return t;
 
         Tooltip tTip = new Tooltip(
                 "Content: \"" + content + "\"\n" +
-                        "Color: RGB(" + (int)(color.getRed() * 255) + "," +
-                        (int)(color.getGreen() * 255) + "," +
-                        (int)(color.getBlue() * 255) + ")\n"
+                        "Color: " + ColorHelperKt.getReadableColorString(color)
         );
+
         tTip.setShowDelay(Duration.ZERO);
         Tooltip.install(t, tTip);
 

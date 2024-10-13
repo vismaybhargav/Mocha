@@ -39,6 +39,8 @@ fun getHexString(color: Color): String {
     throw NotImplementedError()
 }
 
+fun getReadableColorString(color: Color): String = "RGB(${(color.red * 255).toInt()}, ${(color.green * 255).toInt()}, ${(color.blue * 255).toInt()})"
+
 /**
  * @param value a rgba value of a color [0, 256)
  */
