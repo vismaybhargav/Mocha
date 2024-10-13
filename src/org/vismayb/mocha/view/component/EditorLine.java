@@ -1,5 +1,6 @@
 package org.vismayb.mocha.view.component;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
@@ -7,6 +8,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+import org.vismayb.mocha.GlobalConstants;
 import org.vismayb.mocha.Loggable;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.view.util.ColorHelperKt;
@@ -76,6 +79,8 @@ public class EditorLine extends HBox implements Loggable {
                         yield ColorHelperKt.generateColor(255, 127, 108);
                     case KEYWORD:
                         yield ColorHelperKt.generateColor(249, 122, 176);
+                    case COMMENT:
+                        yield ColorHelperKt.generateColor(122, 126, 133);
                     default:
                         yield ColorHelperKt.generateColor(187, 189, 180);
                 })
@@ -103,13 +108,25 @@ public class EditorLine extends HBox implements Loggable {
         t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 15));
         t.setFill(color);
         t.setFontSmoothingType(FontSmoothingType.LCD);
+
+        if(!GlobalConstants.Companion.getDevMode()) return t;
+
+        Tooltip tTip = new Tooltip(
+                "Content: \"" + content + "\"\n" +
+                        "Color: RGB(" + (int)(color.getRed() * 255) + "," +
+                        (int)(color.getGreen() * 255) + "," +
+                        (int)(color.getBlue() * 255) + ")\n"
+        );
+        tTip.setShowDelay(Duration.ZERO);
+        Tooltip.install(t, tTip);
+
         return t;
     }
 
     @Override
     public void logImpl() {
         System.out.println("Line " + lineNumber);
-        System.out.println("Text: " + (text.isEmpty() ? "EMPTY" : text)); // Just for convenience’s sake
+        System.out.println("Text: \n" + (text.isEmpty() ? "EMPTY" : text)); // Just for convenience’s sake
         System.out.println("Tokens: " + tokens);
         System.out.println("====================================================");
     }
