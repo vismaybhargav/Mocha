@@ -12,6 +12,8 @@ import org.vismayb.mocha.backend.util.FileUtil;
 import org.vismayb.mocha.view.component.TextFileEditor;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main extends Application {
     private final BorderPane bPane = new BorderPane();
@@ -19,7 +21,7 @@ public class Main extends Application {
     private TextFileEditor textFileEditor;
 
     public static void main(String[] args) {
-        GlobalConstants.Companion.setLoggingEnabled(Boolean.parseBoolean(args[0]));
+        parseArgs(Arrays.asList(args));
         launch(args);
     }
 
@@ -52,12 +54,21 @@ public class Main extends Application {
         mBar.getMenus().add(fileMenu);
         fileMenu.getItems().add(fileOpenItem);
 
+
         return mBar;
     }
 
     private void applyStageConfigs(Stage stage) {
         stage.setTitle("File Reader Test");
-        stage.setMinHeight(600);
-        stage.setMinWidth(800);
+        stage.setMinHeight(GlobalConstants.Companion.getHeight());
+        stage.setMinWidth(GlobalConstants.Companion.getWidth());
+    }
+
+    private static void parseArgs(List<String> args) {
+        if(args.contains("-withLogs")) GlobalConstants.Companion.setLoggingEnabled(true);
+        if(args.contains("-defaultFile")) GlobalConstants.Companion.setDefaultFile(
+                new File(args.get(args.indexOf("-defaultFile") + 1))
+        );
+        if(args.contains("-devModeEnabled")) GlobalConstants.Companion.setDevMode(true);
     }
 }
