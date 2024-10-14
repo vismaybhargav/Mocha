@@ -41,7 +41,6 @@ public class EditorLine extends HBox implements Loggable {
      */
     private void generateView() {
         // We need to add the first bit before the first token in case the first token.startOffset() != 0
-
         if(!tokens.isEmpty()) {
             addStringToLineContainer(text.substring(0, tokens.getFirst().getStartOffset()));
         } else {
