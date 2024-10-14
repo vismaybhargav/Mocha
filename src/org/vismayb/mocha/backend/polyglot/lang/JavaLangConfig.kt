@@ -12,7 +12,7 @@ private val keywords: Array<String> = arrayOf(
     "package", "private", "protected", "public", "return",
     "static", "strictfp", "super", "switch", "synchronized", "this",
     "throw", "throws", "transient", "try", "volatile",
-    "while"
+    "while", "var"
 )
 
 val primitiveTypes: Array<String> = arrayOf(
@@ -23,7 +23,7 @@ val instanceModifiers: Array<String> = arrayOf(
     "this", "super"
 )
 
-val keywordPattern: Pattern = generateKeywordPattern(keywords)
+val keywordPattern: Pattern = generateKeywordPattern(keywords.plus(primitiveTypes).plus(instanceModifiers))
 val singleCommentPattern: Pattern = Pattern.compile("//[^\n]*")
 val multiCommentPattern: Pattern = Pattern.compile("/\\*[\\s\\S]*?\\*/\n")
 
