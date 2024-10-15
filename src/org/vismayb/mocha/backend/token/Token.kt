@@ -1,8 +1,5 @@
 package org.vismayb.mocha.backend.token
 
-import org.vismayb.mocha.backend.util.FileUtil
-import java.io.File
-
 /**
  * A piece of code that has extra data associated with it
  */

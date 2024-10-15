@@ -63,8 +63,9 @@ class EditorModel(private val file: File) {
         // Remove if a token is contained within a high priority token
         highPriorityTokens.forEach { highPriorityToken ->
             tokens.removeIf { token ->
-                token.type.getTypePriority() < Token.TokenType.STRING_LITERAL.getTypePriority()
-                        && token.isContainedWithin(highPriorityToken)
+                // We check if the token is not the same because we removed the check for
+                // priority to be below the string level
+                highPriorityToken != token && token.isContainedWithin(highPriorityToken)
             }
         }
     }
