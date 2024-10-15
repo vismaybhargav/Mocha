@@ -40,14 +40,14 @@ public class EditorLine extends HBox implements Loggable {
      * Generates the view for this editorLine
      */
     private void generateView() {
-        // We need to add the first bit before the first token in case the first token.startOffset() != 0
-        if(!tokens.isEmpty()) {
-            addStringToLineContainer(text.substring(0, tokens.getFirst().getStartOffset()));
-        } else {
-            // We need to just make it with the text if there are no tokens on a given line.
+        // We need to just make it with the text if there are no tokens on a given line.
+        if(tokens.isEmpty()) {
             addStringToLineContainer(text);
             return;
         }
+
+        // We need to add the first bit before the first token in case the first token.startOffset() != 0
+        addStringToLineContainer(text.substring(0, tokens.getFirst().getStartOffset()));
 
         // Insert each token's contents in between the last token and the curr token.
         for (var i = 0; i < tokens.size(); i++) {
