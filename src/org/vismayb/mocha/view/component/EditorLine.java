@@ -10,21 +10,29 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.vismayb.mocha.GlobalConstants;
-import org.vismayb.mocha.Loggable;
+import org.vismayb.mocha.logging.Loggable;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.view.util.ColorHelperKt;
 
-import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 public class EditorLine extends HBox implements Loggable {
+    private static final StringBuilder logFileBuilder = new StringBuilder();
+    public static final FileWriter logFileWriter;
+
+    static {
+        try {
+            logFileWriter = new FileWriter("logs/LogFile.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private final String text;
     private final List<Token> tokens;
     private final int lineNumber;
-
-    public EditorLine(final String text, final int lineNumber) {
-        this(text, new ArrayList<>(), lineNumber);
-    }
 
     public EditorLine(final String text, final List<Token> tokens, final int lineNumber) {
         this.text = text;
@@ -128,9 +136,24 @@ public class EditorLine extends HBox implements Loggable {
 
     @Override
     public void logImpl() {
-        System.out.println("Line " + lineNumber);
-        System.out.println("Text: \n" + (text.isEmpty() ? "EMPTY" : text)); // Just for convenience’s sake
-        System.out.println("Tokens: " + tokens);
-        System.out.println("====================================================");
+        logFileBuilder.setLength(0); // Clear the string builder
+
+        // I know this is bad formatting... what am I supposed to do??
+        logFileBuilder
+                .append("Line ").append(lineNumber).append("\n")
+                .append("Text: \n").append(text.isEmpty() ? "EMPTY" : text).append("\n")
+                .append("Tokens: \n").append(tokens).append("\n")
+                .append("====================================================");
+
+        if(GlobalConstants.Companion.getLogToFile()) {
+            // TODO: Stop overwriting to the newest file
+            try {
+                logFileWriter.append(logFileBuilder);
+            } catch (IOException e) {
+                System.out.println("IO Exception Occurred");
+            }
+        } else {
+            System.out.println(logFileBuilder);
+        }
     }
 }

@@ -1,4 +1,6 @@
-package org.vismayb.mocha;
+package org.vismayb.mocha.logging;
+
+import org.vismayb.mocha.GlobalConstants;
 
 /**
  * To be implemented by classes that need information logged at runtime, but do not require a string representation

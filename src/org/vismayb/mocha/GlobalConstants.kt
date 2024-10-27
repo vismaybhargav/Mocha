@@ -8,6 +8,7 @@ import java.io.File
 class GlobalConstants {
     companion object {
         var loggingEnabled = false
+        var logToFile = false
         var devMode = false
         var width = 800
         var height = 600
