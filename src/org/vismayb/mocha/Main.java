@@ -9,11 +9,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import org.vismayb.mocha.backend.util.FileUtil;
-import org.vismayb.mocha.view.component.EditorLine;
 import org.vismayb.mocha.view.component.TextFileEditor;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +27,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        EditorLine.logFileWriter.write(""); // Clear the logFile
         applyStageConfigs(primaryStage);
 
         MenuBar mBar = createMenuBar();
@@ -55,11 +52,6 @@ public class Main extends Application {
             fileToEdit = FileUtil.getFileFromUser();
 
             textFileEditor = new TextFileEditor(fileToEdit);
-            try {
-                EditorLine.logFileWriter.write(""); // Clear the logFile
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
 
             bPane.setCenter(textFileEditor);
         });

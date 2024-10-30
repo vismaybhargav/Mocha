@@ -6,7 +6,6 @@ import org.vismayb.mocha.backend.polyglot.lang.singleCommentPattern
 import org.vismayb.mocha.backend.polyglot.lang.stringPattern
 
 import org.vismayb.mocha.backend.token.Token
-import org.vismayb.mocha.view.component.EditorLine
 
 import java.io.File
 import java.util.*
@@ -19,7 +18,6 @@ class EditorModel(private val file: File) {
     var lines: List<String> = file.readLines() // Use a more robust approach
 
     init {
-        EditorLine.logFileWriter.write(file.name + "\n\n") // Write the name of the file so we know what it is
         tokenizeFile()
         tokens.sort()
         filterContainedTokensByPriority()

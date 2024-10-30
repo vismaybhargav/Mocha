@@ -14,22 +14,10 @@ import org.vismayb.mocha.logging.Loggable;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.view.util.ColorHelperKt;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class EditorLine extends HBox implements Loggable {
-    private static final StringBuilder logFileBuilder = new StringBuilder();
-    public static final FileWriter logFileWriter;
-
-    static {
-        try {
-            logFileWriter = new FileWriter("logs/LogFile.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    public static final StringBuilder logFileBuilder = new StringBuilder();
     private final String text;
     private final List<Token> tokens;
     private final int lineNumber;
@@ -144,16 +132,5 @@ public class EditorLine extends HBox implements Loggable {
                 .append("Text: \n").append(text.isEmpty() ? "EMPTY" : text).append("\n")
                 .append("Tokens: \n").append(tokens).append("\n")
                 .append("====================================================");
-
-        if(GlobalConstants.Companion.getLogToFile()) {
-            // TODO: Stop overwriting to the newest file
-            try {
-                logFileWriter.append(logFileBuilder);
-            } catch (IOException e) {
-                System.out.println("IO Exception Occurred");
-            }
-        } else {
-            System.out.println(logFileBuilder);
-        }
     }
 }
