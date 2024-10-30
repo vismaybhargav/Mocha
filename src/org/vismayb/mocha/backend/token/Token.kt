@@ -13,12 +13,11 @@ data class Token (
 
     /** EACH CASE IN THE ENUM HAS TO BE PLACED IN ORDER OF THEIR PRIORITY */
     enum class TokenType {
-        COMMENT, // Single and Multiline
+        MISC, // Just any text that is none of the stuff at the top
+        KEYWORD, // Determined by polyglot language config
         NUMBER_LITERAL, // Integers, Decimal
         STRING_LITERAL, // Double Quotes
-        KEYWORD, // Determined by polyglot language config
-        MISC; // Just any text that is none of the stuff at the top
-
+        COMMENT; // Single and Multiline
         /**
          * Get the priority of a token based on its type
          * @param token the token to get the priority of
@@ -34,7 +33,7 @@ data class Token (
      * @param other the token that might contain this token
      * @return true if token1 is contained by the other token
      */
-    fun isContainedWithin(other: Token): Boolean = (startOffset >= other.startOffset && endOffset <= other.endOffset)
+    fun isContainedWithin(other: Token): Boolean = (lineNumber == other.lineNumber && startOffset >= other.startOffset && endOffset <= other.endOffset)
 
     /**
      * compareTo implementation for the token class.

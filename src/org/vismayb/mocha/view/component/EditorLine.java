@@ -1,5 +1,6 @@
 package org.vismayb.mocha.view.component;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
@@ -7,45 +8,42 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.vismayb.mocha.Loggable;
+import javafx.util.Duration;
+import org.vismayb.mocha.GlobalConstants;
+import org.vismayb.mocha.logging.Loggable;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.view.util.ColorHelperKt;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EditorLine extends HBox implements Loggable {
+    public static final StringBuilder logFileBuilder = new StringBuilder();
     private final String text;
     private final List<Token> tokens;
     private final int lineNumber;
-
-    public EditorLine(final String text, final int lineNumber) {
-        this(text, new ArrayList<>(), lineNumber);
-    }
 
     public EditorLine(final String text, final List<Token> tokens, final int lineNumber) {
         this.text = text;
         this.tokens = tokens;
         this.lineNumber = lineNumber;
 
+        log();
         generateView();
         HBox.setHgrow(this, Priority.ALWAYS);
-        log();
     }
 
     /**
      * Generates the view for this editorLine
      */
     private void generateView() {
-        // We need to add the first bit before the first token in case the first token.startOffset() != 0
-
-        if(!tokens.isEmpty()) {
-            addStringToLineContainer(text.substring(0, tokens.getFirst().getStartOffset()));
-        } else {
-            // We need to just make it with the text if there are no tokens on a given line.
+        // We need to just make it with the text if there are no tokens on a given line.
+        if(tokens.isEmpty()) {
             addStringToLineContainer(text);
             return;
         }
+
+        // We need to add the first bit before the first token in case the first token.startOffset() != 0
+        addStringToLineContainer(text.substring(0, tokens.getFirst().getStartOffset()));
 
         // Insert each token's contents in between the last token and the curr token.
         for (var i = 0; i < tokens.size(); i++) {
@@ -76,6 +74,8 @@ public class EditorLine extends HBox implements Loggable {
                         yield ColorHelperKt.generateColor(255, 127, 108);
                     case KEYWORD:
                         yield ColorHelperKt.generateColor(249, 122, 176);
+                    case COMMENT:
+                        yield ColorHelperKt.generateColor(122, 126, 133);
                     default:
                         yield ColorHelperKt.generateColor(187, 189, 180);
                 })
@@ -99,18 +99,37 @@ public class EditorLine extends HBox implements Loggable {
      * @return the text object
      */
     private static Text createText(final String content, final Color color) {
+        // Create the text object with some sensible defaults
+        // TODO: Should be controlled by passing in settings.
         var t = new Text(content);
         t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 15));
         t.setFill(color);
         t.setFontSmoothingType(FontSmoothingType.LCD);
+
+        // This part should probably not be in this because its a "component"
+        // but im guessing it should be fine cuz can just remove the cli functionality
+        if(!GlobalConstants.Companion.isDevMode()) return t;
+
+        Tooltip tTip = new Tooltip(
+                "Content: \"" + content + "\"\n" +
+                        "Color: " + ColorHelperKt.getReadableColorString(color)
+        );
+
+        tTip.setShowDelay(Duration.ZERO);
+        Tooltip.install(t, tTip);
+
         return t;
     }
 
     @Override
     public void logImpl() {
-        System.out.println("Line " + lineNumber);
-        System.out.println("Text: " + (text.isEmpty() ? "EMPTY" : text)); // Just for convenience’s sake
-        System.out.println("Tokens: " + tokens);
-        System.out.println("====================================================");
+        logFileBuilder.setLength(0); // Clear the string builder
+
+        // I know this is bad formatting... what am I supposed to do??
+        logFileBuilder
+                .append("Line ").append(lineNumber).append("\n")
+                .append("Text: \n").append(text.isEmpty() ? "EMPTY" : text).append("\n")
+                .append("Tokens: \n").append(tokens).append("\n")
+                .append("====================================================");
     }
 }

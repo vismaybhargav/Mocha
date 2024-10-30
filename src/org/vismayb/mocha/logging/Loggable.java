@@ -1,4 +1,6 @@
-package org.vismayb.mocha;
+package org.vismayb.mocha.logging;
+
+import org.vismayb.mocha.GlobalConstants;
 
 /**
  * To be implemented by classes that need information logged at runtime, but do not require a string representation
@@ -7,10 +9,10 @@ package org.vismayb.mocha;
  */
 public interface Loggable {
     /**
-     * Calls {@link Loggable#logImpl()} only if dev logging is enabled by {@link GlobalConstants#loggingEnabled}
+     * Calls {@link Loggable#logImpl()} only if dev logging is enabled by {@link GlobalConstants#isLoggingEnabled}
      */
     default void log() {
-        if (GlobalConstants.Companion.getLoggingEnabled()) {
+        if (GlobalConstants.Companion.isLoggingEnabled()) {
             logImpl();
         }
     }

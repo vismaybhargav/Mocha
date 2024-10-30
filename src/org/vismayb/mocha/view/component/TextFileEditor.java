@@ -6,7 +6,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
+import org.vismayb.mocha.GlobalConstants;
 import org.vismayb.mocha.backend.model.EditorModel;
+import org.vismayb.mocha.logging.LoggingService;
 import org.vismayb.mocha.view.util.ColorHelperKt;
 
 import java.io.File;
@@ -17,6 +19,7 @@ public class TextFileEditor extends ScrollPane {
     /** Should not be made new, children should be cleared and repopulated with {@code recreateFileView()}*/
     private final VBox lineContainer = new VBox();
     private final VBox gutter = new VBox();
+    private final LoggingService loggingService = new LoggingService("logs/LogFile.txt");
 
     public TextFileEditor(File file) {
         super();
@@ -59,6 +62,11 @@ public class TextFileEditor extends ScrollPane {
             var tokensInLine = model.getTokensByLineNumber(i);
             EditorLine line = new EditorLine(model.getLines().get(i), tokensInLine, i + 1);
             lineContainer.getChildren().add(line);
+
+            if(!GlobalConstants.Companion.isLoggingEnabled()) continue;
+            // Log the appropriate log information
+            loggingService.rewriteIntermediateBuffer(EditorLine.logFileBuilder.toString());
+            loggingService.writeLog(true);
         }
     }
 
