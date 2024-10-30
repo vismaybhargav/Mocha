@@ -4,6 +4,10 @@ out/
 .idea/
 !**/src/test/**/out/
 
+### Mocha ###
+logs/
+
+
 ### Eclipse ###
 .apt_generated
 .classpath
