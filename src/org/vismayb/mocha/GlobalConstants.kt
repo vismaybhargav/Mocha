@@ -7,9 +7,9 @@ import java.io.File
  */
 class GlobalConstants {
     companion object {
-        var loggingEnabled = false
+        var isLoggingEnabled = false
         var logToFile = false
-        var devMode = false
+        var isDevMode = false
         var width = 800
         var height = 600
         var defaultFile: File? = null

@@ -9,10 +9,10 @@ import org.vismayb.mocha.GlobalConstants;
  */
 public interface Loggable {
     /**
-     * Calls {@link Loggable#logImpl()} only if dev logging is enabled by {@link GlobalConstants#loggingEnabled}
+     * Calls {@link Loggable#logImpl()} only if dev logging is enabled by {@link GlobalConstants#isLoggingEnabled}
      */
     default void log() {
-        if (GlobalConstants.Companion.getLoggingEnabled()) {
+        if (GlobalConstants.Companion.isLoggingEnabled()) {
             logImpl();
         }
     }

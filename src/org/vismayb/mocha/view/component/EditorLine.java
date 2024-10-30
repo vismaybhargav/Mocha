@@ -109,7 +109,7 @@ public class EditorLine extends HBox implements Loggable {
 
         // This part should probably not be in this because its a "component"
         // but im guessing it should be fine cuz can just remove the cli functionality
-        if(!GlobalConstants.Companion.getDevMode()) return t;
+        if(!GlobalConstants.Companion.isDevMode()) return t;
 
         Tooltip tTip = new Tooltip(
                 "Content: \"" + content + "\"\n" +
