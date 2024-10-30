@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class FileUtil {
@@ -73,6 +74,16 @@ public class FileUtil {
             count = -1;
         }
         return count;
+    }
+
+    public static void purgeDirectory(File directory) {
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
+            if(file.isDirectory()) {
+                purgeDirectory(file);
+            } else {
+                file.delete();
+            }
+        }
     }
 
     public static int getLineCount(final String str) {

@@ -22,6 +22,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         parseArgs(Arrays.asList(args));
+        FileUtil.purgeDirectory(new File("logs"));
         launch(args);
     }
 
