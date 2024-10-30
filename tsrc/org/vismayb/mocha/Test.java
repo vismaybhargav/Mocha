@@ -9,7 +9,7 @@ public class Test {
     public static void main(String[] args) {
         System.out.println("String var Literal");
 
-        // Here is a comment that is single line for if let var
+        // Here is a comment that is single line for if let var "Hello"
         Arrays.stream(args).anyMatch("Hi!"::equals);
 
         new String().length();
@@ -20,20 +20,21 @@ public class Test {
 
     /**
      * Prints a triangle according to certain requirements
-     * for if let var
+     * for if let var "String inside javadoc"
      * @param base base width of the triangle
      * @return -1
      */
     public int printTriangle(int base) {
         for(int i = 0; i < base; i++) {
             for(int j = 0; j < i; j++) {
-                System.out.println("*");
+                System.out.println("* /*  Here is a comment inside the string literal  */");
             }
             System.out.println();
         }
 
         /*
-         *  Here is a multi-line comment
+         * // Comment here
+         *  Here is a multi-line comment "String inside"
          * for if let var
          */
         return (int)-1.0;

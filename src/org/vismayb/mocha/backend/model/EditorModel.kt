@@ -27,8 +27,6 @@ class EditorModel(private val file: File) {
      * Tokenizes the entire file and adds to the list of tokens
      */
     private fun tokenizeFile(){
-        // TODO: Add separation for primitive types
-
         var i = 0
         file.forEachLine {
             matchAllTokens(it, keywordPattern,       Token.TokenType.KEYWORD,        i)
@@ -59,53 +57,20 @@ class EditorModel(private val file: File) {
      */
     private fun filterContainedTokensByPriority() {
         // get all the high priority tokens (string and comment)
-        val highPriorityIdxes = getTokenIndexesByType(Token.TokenType.COMMENT)
+        val highPriorityTokens = getTokensByType(Token.TokenType.COMMENT)
+            .plus(getTokensByType(Token.TokenType.STRING_LITERAL))
 
-        highPriorityIdxes.addAll( // What are we doing anymore??
-            getTokenIndexesByType(Token.TokenType.STRING_LITERAL)
-        )
-
-        val sortedIndicies = highPriorityIdxes.sortedDescending()
-
-        // Remove those tokens if they are contained within the higher priority token
-        sortedIndicies.forEach { idx ->
+        // Remove if a token is contained within a high priority token
+        highPriorityTokens.forEach { highPriorityToken ->
             tokens.removeIf { token ->
-                token.type.getTypePriority() < Token.TokenType.STRING_LITERAL.getTypePriority()
-                        && token.isContainedWithin(tokens[idx])
+                // We check if the token is not the same because we removed the check for
+                // priority to be below the string level
+                highPriorityToken != token && token.isContainedWithin(highPriorityToken)
             }
         }
-
-        /*
-        tokens.removeIf { tokens.isContainedWithin(highPriorityIdxes.) }
-        for (i in tokens.indices) {
-            for (j in highPriorityIdxes) {
-                if (tokens[i].isContainedWithin(tokens[j])) {
-                    tokens.removeAt(i)
-                    continue
-                }
-            }
-        }
-         */
     }
 
-    /**
-     * Get the indexes of all the tokens in the tokens list that have the specified type
-     * @param type The type of token to fetch
-     * @return list of all the indices of the tokens with specified type
-     */
-    private fun getTokenIndexesByType(type: Token.TokenType): MutableList<Int> {
-        val typeTokens = mutableListOf<Int>()
+    private fun getTokensByType(type: Token.TokenType): List<Token> = tokens.filter { it.type == type }
 
-        for(i in tokens.indices) {
-            if(tokens[i].type == type) {
-                typeTokens.add(i)
-            }
-        }
-
-        return typeTokens
-    }
-
-    fun getTokensByLineNumber(lineNumber: Int): List<Token> {
-        return tokens.filter { it.lineNumber == lineNumber }
-    }
+    fun getTokensByLineNumber(lineNumber: Int): List<Token> = tokens.filter { it.lineNumber == lineNumber }
 }
