@@ -24,6 +24,8 @@ val instanceModifiers: Array<String> = arrayOf(
 )
 
 val keywordPattern: Pattern = generateKeywordPattern(keywords.plus(primitiveTypes).plus(instanceModifiers))
+val callPattern: Pattern = Pattern.compile("\\b\\w+(?=\\s*\\()")
+val classPattern: Pattern = Pattern.compile("\\b[A-Z][a-zA-Z0-9]*\\b")
 val singleCommentPattern: Pattern = Pattern.compile("//[^\n]*")
 val multiCommentPattern: Pattern = Pattern.compile("/\\*[\\s\\S]*?\\*/\n")
 

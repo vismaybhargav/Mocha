@@ -1,9 +1,6 @@
 package org.vismayb.mocha.backend.model
 
-import org.vismayb.mocha.backend.polyglot.lang.keywordPattern
-import org.vismayb.mocha.backend.polyglot.lang.numberPattern
-import org.vismayb.mocha.backend.polyglot.lang.singleCommentPattern
-import org.vismayb.mocha.backend.polyglot.lang.stringPattern
+import org.vismayb.mocha.backend.polyglot.lang.*
 
 import org.vismayb.mocha.backend.token.Token
 
@@ -33,6 +30,8 @@ class EditorModel(private val file: File) {
             matchAllTokens(it, numberPattern,        Token.TokenType.NUMBER_LITERAL, i)
             matchAllTokens(it, singleCommentPattern, Token.TokenType.COMMENT,        i)
             matchAllTokens(it, stringPattern,        Token.TokenType.STRING_LITERAL, i)
+            matchAllTokens(it, callPattern,          Token.TokenType.CALL,           i)
+            matchAllTokens(it, classPattern,         Token.TokenType.CLASS,          i)
             i++
         }
     }
@@ -59,6 +58,8 @@ class EditorModel(private val file: File) {
         // get all the high priority tokens (string and comment)
         val highPriorityTokens = getTokensByType(Token.TokenType.COMMENT)
             .plus(getTokensByType(Token.TokenType.STRING_LITERAL))
+            .plus(getTokensByType(Token.TokenType.KEYWORD))
+            .plus(getTokensByType(Token.TokenType.CALL))
 
         // Remove if a token is contained within a high priority token
         highPriorityTokens.forEach { highPriorityToken ->

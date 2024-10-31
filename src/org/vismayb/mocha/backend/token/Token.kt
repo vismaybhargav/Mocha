@@ -14,6 +14,8 @@ data class Token (
     /** EACH CASE IN THE ENUM HAS TO BE PLACED IN ORDER OF THEIR PRIORITY */
     enum class TokenType {
         MISC, // Just any text that is none of the stuff at the top
+        CLASS, // Static class access or class declerations
+        CALL, // Function call or object construction
         KEYWORD, // Determined by polyglot language config
         NUMBER_LITERAL, // Integers, Decimal
         STRING_LITERAL, // Double Quotes

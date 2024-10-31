@@ -29,7 +29,7 @@ public class EditorLine extends HBox implements Loggable {
 
         log();
         generateView();
-        HBox.setHgrow(this, Priority.ALWAYS);
+
     }
 
     /**
@@ -76,8 +76,12 @@ public class EditorLine extends HBox implements Loggable {
                         yield ColorHelperKt.generateColor(249, 122, 176);
                     case COMMENT:
                         yield ColorHelperKt.generateColor(122, 126, 133);
+                    case CALL:
+                        yield ColorHelperKt.generateColor(116, 194, 179);
+                    case CLASS:
+                        yield ColorHelperKt.generateColor(129, 230, 255);
                     default:
-                        yield ColorHelperKt.generateColor(187, 189, 180);
+                        yield ColorHelperKt.generateColor(0, 189, 0); // For debugging new highlights
                 })
         );
     }
