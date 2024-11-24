@@ -2,7 +2,6 @@ package org.vismayb.mocha.view.component;
 
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
@@ -10,6 +9,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.vismayb.mocha.GlobalConstants;
+import org.vismayb.mocha.backend.polyglot.lang.JavaLangConfigKt;
 import org.vismayb.mocha.logging.Loggable;
 import org.vismayb.mocha.backend.token.Token;
 import org.vismayb.mocha.view.util.ColorHelperKt;
@@ -68,18 +68,8 @@ public class EditorLine extends HBox implements Loggable {
     private void addTokenToLineContainer(Token token) {
         getChildren().add(createText(token.getContent(),
                 switch (token.getType()) {
-                    case NUMBER_LITERAL:
-                        yield ColorHelperKt.generateColor(215, 199, 129);
-                    case STRING_LITERAL:
-                        yield ColorHelperKt.generateColor(255, 127, 108);
-                    case KEYWORD:
-                        yield ColorHelperKt.generateColor(249, 122, 176);
-                    case COMMENT:
-                        yield ColorHelperKt.generateColor(122, 126, 133);
-                    case CALL:
-                        yield ColorHelperKt.generateColor(116, 194, 179);
-                    case CLASS:
-                        yield ColorHelperKt.generateColor(129, 230, 255);
+                    case CALL, CLASS, NUMBER_LITERAL, STRING_LITERAL, KEYWORD, COMMENT:
+                        yield JavaLangConfigKt.getTheme().get(token.getType());
                     default:
                         yield ColorHelperKt.generateColor(0, 189, 0); // For debugging new highlights
                 })

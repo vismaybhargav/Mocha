@@ -1,0 +1,252 @@
+Line 1
+Text: 
+package org.vismayb.mocha;
+Tokens: 
+[Token(startOffset=0, endOffset=7, content=package, type=KEYWORD, lineNumber=0)]
+====================================================
+Line 2
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 3
+Text: 
+import java.util.Arrays;
+Tokens: 
+[Token(startOffset=0, endOffset=6, content=import, type=KEYWORD, lineNumber=2), Token(startOffset=17, endOffset=23, content=Arrays, type=CLASS, lineNumber=2)]
+====================================================
+Line 4
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 5
+Text: 
+public class Test {
+Tokens: 
+[Token(startOffset=0, endOffset=6, content=public, type=KEYWORD, lineNumber=4), Token(startOffset=7, endOffset=12, content=class, type=KEYWORD, lineNumber=4), Token(startOffset=13, endOffset=17, content=Test, type=CLASS, lineNumber=4)]
+====================================================
+Line 6
+Text: 
+    private static final double NEGATIVE_PIE = 3.1415;
+Tokens: 
+[Token(startOffset=4, endOffset=11, content=private, type=KEYWORD, lineNumber=5), Token(startOffset=12, endOffset=18, content=static, type=KEYWORD, lineNumber=5), Token(startOffset=19, endOffset=24, content=final, type=KEYWORD, lineNumber=5), Token(startOffset=25, endOffset=31, content=double, type=KEYWORD, lineNumber=5), Token(startOffset=47, endOffset=53, content=3.1415, type=NUMBER_LITERAL, lineNumber=5)]
+====================================================
+Line 7
+Text: 
+    private static final long nanoseconds = -23423424324L;
+Tokens: 
+[Token(startOffset=4, endOffset=11, content=private, type=KEYWORD, lineNumber=6), Token(startOffset=12, endOffset=18, content=static, type=KEYWORD, lineNumber=6), Token(startOffset=19, endOffset=24, content=final, type=KEYWORD, lineNumber=6), Token(startOffset=25, endOffset=29, content=long, type=KEYWORD, lineNumber=6), Token(startOffset=44, endOffset=57, content=-23423424324L, type=NUMBER_LITERAL, lineNumber=6)]
+====================================================
+Line 8
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 9
+Text: 
+    public static void main(String[] args) {
+Tokens: 
+[Token(startOffset=4, endOffset=10, content=public, type=KEYWORD, lineNumber=8), Token(startOffset=11, endOffset=17, content=static, type=KEYWORD, lineNumber=8), Token(startOffset=18, endOffset=22, content=void, type=KEYWORD, lineNumber=8), Token(startOffset=23, endOffset=27, content=main, type=CALL, lineNumber=8), Token(startOffset=28, endOffset=34, content=String, type=CLASS, lineNumber=8)]
+====================================================
+Line 10
+Text: 
+        System.out.println("String var Literal");
+Tokens: 
+[Token(startOffset=8, endOffset=14, content=System, type=CLASS, lineNumber=9), Token(startOffset=19, endOffset=26, content=println, type=CALL, lineNumber=9), Token(startOffset=27, endOffset=47, content="String var Literal", type=STRING_LITERAL, lineNumber=9)]
+====================================================
+Line 11
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 12
+Text: 
+        // Here is a comment that is single line for if let var "Hello"
+Tokens: 
+[Token(startOffset=8, endOffset=71, content=// Here is a comment that is single line for if let var "Hello", type=COMMENT, lineNumber=11)]
+====================================================
+Line 13
+Text: 
+        Arrays.stream(args).anyMatch("Hi!"::equals);
+Tokens: 
+[Token(startOffset=8, endOffset=14, content=Arrays, type=CLASS, lineNumber=12), Token(startOffset=15, endOffset=21, content=stream, type=CALL, lineNumber=12), Token(startOffset=28, endOffset=36, content=anyMatch, type=CALL, lineNumber=12), Token(startOffset=37, endOffset=42, content="Hi!", type=STRING_LITERAL, lineNumber=12)]
+====================================================
+Line 14
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 15
+Text: 
+        new String().length();
+Tokens: 
+[Token(startOffset=8, endOffset=11, content=new, type=KEYWORD, lineNumber=14), Token(startOffset=12, endOffset=18, content=String, type=CALL, lineNumber=14), Token(startOffset=21, endOffset=27, content=length, type=CALL, lineNumber=14)]
+====================================================
+Line 16
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 17
+Text: 
+        var pi = Math.PI;
+Tokens: 
+[Token(startOffset=8, endOffset=11, content=var, type=KEYWORD, lineNumber=16), Token(startOffset=17, endOffset=21, content=Math, type=CLASS, lineNumber=16), Token(startOffset=22, endOffset=24, content=PI, type=CLASS, lineNumber=16)]
+====================================================
+Line 18
+Text: 
+        pi = NEGATIVE_PIE;
+Tokens: 
+[]
+====================================================
+Line 19
+Text: 
+    }
+Tokens: 
+[]
+====================================================
+Line 20
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 21
+Text: 
+    /**
+Tokens: 
+[]
+====================================================
+Line 22
+Text: 
+     * Prints a triangle according to certain requirements
+Tokens: 
+[Token(startOffset=7, endOffset=13, content=Prints, type=CLASS, lineNumber=21)]
+====================================================
+Line 23
+Text: 
+     * for if let var "String inside javadoc"
+Tokens: 
+[Token(startOffset=7, endOffset=10, content=for, type=KEYWORD, lineNumber=22), Token(startOffset=11, endOffset=13, content=if, type=KEYWORD, lineNumber=22), Token(startOffset=18, endOffset=21, content=var, type=KEYWORD, lineNumber=22), Token(startOffset=22, endOffset=45, content="String inside javadoc", type=STRING_LITERAL, lineNumber=22)]
+====================================================
+Line 24
+Text: 
+     * @param base base width of the triangle
+Tokens: 
+[]
+====================================================
+Line 25
+Text: 
+     * @return -1
+Tokens: 
+[Token(startOffset=8, endOffset=14, content=return, type=KEYWORD, lineNumber=24), Token(startOffset=15, endOffset=17, content=-1, type=NUMBER_LITERAL, lineNumber=24)]
+====================================================
+Line 26
+Text: 
+     */
+Tokens: 
+[]
+====================================================
+Line 27
+Text: 
+    public int printTriangle(int base) {
+Tokens: 
+[Token(startOffset=4, endOffset=10, content=public, type=KEYWORD, lineNumber=26), Token(startOffset=11, endOffset=14, content=int, type=KEYWORD, lineNumber=26), Token(startOffset=15, endOffset=28, content=printTriangle, type=CALL, lineNumber=26), Token(startOffset=29, endOffset=32, content=int, type=KEYWORD, lineNumber=26)]
+====================================================
+Line 28
+Text: 
+        for(int i = 0; i < base; i++) {
+Tokens: 
+[Token(startOffset=12, endOffset=15, content=int, type=KEYWORD, lineNumber=27), Token(startOffset=20, endOffset=21, content=0, type=NUMBER_LITERAL, lineNumber=27)]
+====================================================
+Line 29
+Text: 
+            for(int j = 0; j < i; j++) {
+Tokens: 
+[Token(startOffset=16, endOffset=19, content=int, type=KEYWORD, lineNumber=28), Token(startOffset=24, endOffset=25, content=0, type=NUMBER_LITERAL, lineNumber=28)]
+====================================================
+Line 30
+Text: 
+                System.out.println("* /*  Here is a comment inside the string literal  */");
+Tokens: 
+[Token(startOffset=16, endOffset=22, content=System, type=CLASS, lineNumber=29), Token(startOffset=27, endOffset=34, content=println, type=CALL, lineNumber=29), Token(startOffset=35, endOffset=90, content="* /*  Here is a comment inside the string literal  */", type=STRING_LITERAL, lineNumber=29)]
+====================================================
+Line 31
+Text: 
+            }
+Tokens: 
+[]
+====================================================
+Line 32
+Text: 
+            System.out.println();
+Tokens: 
+[Token(startOffset=12, endOffset=18, content=System, type=CLASS, lineNumber=31), Token(startOffset=23, endOffset=30, content=println, type=CALL, lineNumber=31)]
+====================================================
+Line 33
+Text: 
+        }
+Tokens: 
+[]
+====================================================
+Line 34
+Text: 
+EMPTY
+Tokens: 
+[]
+====================================================
+Line 35
+Text: 
+        /*
+Tokens: 
+[]
+====================================================
+Line 36
+Text: 
+         * // Comment here
+Tokens: 
+[Token(startOffset=11, endOffset=26, content=// Comment here, type=COMMENT, lineNumber=35)]
+====================================================
+Line 37
+Text: 
+         *  Here is a multi-line comment "String inside"
+Tokens: 
+[Token(startOffset=12, endOffset=16, content=Here, type=CLASS, lineNumber=36), Token(startOffset=41, endOffset=56, content="String inside", type=STRING_LITERAL, lineNumber=36)]
+====================================================
+Line 38
+Text: 
+         * for if let var
+Tokens: 
+[Token(startOffset=11, endOffset=14, content=for, type=KEYWORD, lineNumber=37), Token(startOffset=15, endOffset=17, content=if, type=KEYWORD, lineNumber=37), Token(startOffset=22, endOffset=25, content=var, type=KEYWORD, lineNumber=37)]
+====================================================
+Line 39
+Text: 
+         */
+Tokens: 
+[]
+====================================================
+Line 40
+Text: 
+        return (int)-1.0;
+Tokens: 
+[Token(startOffset=16, endOffset=19, content=int, type=KEYWORD, lineNumber=39), Token(startOffset=20, endOffset=24, content=-1.0, type=NUMBER_LITERAL, lineNumber=39)]
+====================================================
+Line 41
+Text: 
+    }
+Tokens: 
+[]
+====================================================
+Line 42
+Text: 
+}
+Tokens: 
+[]
+====================================================

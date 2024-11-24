@@ -5,10 +5,10 @@ package org.vismayb.mocha.backend.token
  */
 data class Token (
     val startOffset: Int,
-    val endOffset: Int,
-    val content: String,
-    val type: TokenType,
-    val lineNumber: Int
+    val endOffset:   Int,
+    val content:  String,
+    val type:  TokenType,
+    val lineNumber:  Int
 ) : Comparable<Token> {
 
     /** EACH CASE IN THE ENUM HAS TO BE PLACED IN ORDER OF THEIR PRIORITY */
