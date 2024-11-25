@@ -1,20 +1,26 @@
 package org.vismayb.mocha.backend.model
 
+import com.github.javaparser.JavaParser
+import com.github.javaparser.StaticJavaParser
+import com.github.javaparser.ast.CompilationUnit
+import com.github.javaparser.ast.visitor.VoidVisitor
+import org.vismayb.mocha.backend.model.visitor.MethodNamePrinter
 import org.vismayb.mocha.backend.polyglot.lang.*
 
 import org.vismayb.mocha.backend.token.Token
 
 import java.io.File
-import java.util.*
 import java.util.regex.Pattern
 
 class EditorModel(private val file: File) {
-    val id: String = UUID.randomUUID().toString()
     private var tokens: MutableList<Token> = mutableListOf()
-    private var text: String = file.useLines { it.joinToString("\n") } // Does this even work?
     var lines: List<String> = file.readLines() // Use a more robust approach
 
     init {
+        var cu: CompilationUnit = StaticJavaParser.parse(file)
+        var visitor: VoidVisitor<Void> = MethodNamePrinter()
+        visitor.visit(cu, null)
+
         tokenizeFile()
         tokens.sort()
         filterContainedTokensByPriority()

@@ -24,7 +24,6 @@ public class TextFileEditor extends ScrollPane {
     public TextFileEditor(File file) {
         super();
 
-
         // Initialize the buffer before because we don't want to do extra checks in other methods.
         model = new EditorModel(file);
 
@@ -52,8 +51,6 @@ public class TextFileEditor extends ScrollPane {
      */
     public void recreateFileView() {
         lineContainer.getChildren().clear();
-
-        //TODO: Refresh the model over here
 
         // This for loops bound should never be changed as it would affect the sync between model and view
         for(int i = 0; i < model.getLines().size(); i++) {

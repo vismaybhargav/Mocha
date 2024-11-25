@@ -12,7 +12,6 @@ import org.vismayb.mocha.backend.util.FileUtil;
 import org.vismayb.mocha.view.component.TextFileEditor;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
