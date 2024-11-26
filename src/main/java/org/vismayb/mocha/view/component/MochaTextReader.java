@@ -13,7 +13,7 @@ import org.vismayb.mocha.view.util.ColorHelperKt;
 
 import java.io.File;
 
-public class TextFileEditor extends ScrollPane {
+public class MochaTextReader extends ScrollPane {
     /** Currently the "model" */
     private final EditorModel model;
     /** Should not be made new, children should be cleared and repopulated with {@code recreateFileView()}*/
@@ -21,7 +21,7 @@ public class TextFileEditor extends ScrollPane {
     private final VBox gutter = new VBox();
     private final LoggingService loggingService = new LoggingService("logs/LogFile.txt");
 
-    public TextFileEditor(File file) {
+    public MochaTextReader(File file) {
         super();
 
         // Initialize the buffer before because we don't want to do extra checks in other methods.

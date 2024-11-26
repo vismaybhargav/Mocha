@@ -1,10 +1,8 @@
 package org.vismayb.mocha.backend.model
 
-import com.github.javaparser.JavaParser
 import com.github.javaparser.StaticJavaParser
 import com.github.javaparser.ast.CompilationUnit
-import com.github.javaparser.ast.visitor.VoidVisitor
-import org.vismayb.mocha.backend.model.visitor.MethodNamePrinter
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import org.vismayb.mocha.backend.polyglot.lang.*
 
 import org.vismayb.mocha.backend.token.Token
@@ -15,12 +13,9 @@ import java.util.regex.Pattern
 class EditorModel(private val file: File) {
     private var tokens: MutableList<Token> = mutableListOf()
     var lines: List<String> = file.readLines() // Use a more robust approach
+    var compilationUnit: CompilationUnit = StaticJavaParser.parse(file)
 
     init {
-        var cu: CompilationUnit = StaticJavaParser.parse(file)
-        var visitor: VoidVisitor<Void> = MethodNamePrinter()
-        visitor.visit(cu, null)
-
         tokenizeFile()
         tokens.sort()
         filterContainedTokensByPriority()

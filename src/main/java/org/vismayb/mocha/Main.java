@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import org.vismayb.mocha.backend.util.FileUtil;
-import org.vismayb.mocha.view.component.TextFileEditor;
+import org.vismayb.mocha.view.component.MochaTextReader;
 
 import java.io.File;
 import java.util.Arrays;
@@ -18,12 +18,11 @@ import java.util.List;
 public class Main extends Application {
     private final BorderPane bPane = new BorderPane();
     private File fileToEdit;
-    private TextFileEditor textFileEditor;
+    private MochaTextReader mochaTextReader;
 
     public static void main(String[] args) {
         parseArgs(Arrays.asList(args));
-        if(GlobalConstants.Companion.isLoggingEnabled())
-            FileUtil.purgeDirectory(new File("logs"));
+        if(GlobalConstants.Companion.isLoggingEnabled()) FileUtil.purgeDirectory(new File("logs"));
         launch(args);
     }
 
@@ -36,8 +35,8 @@ public class Main extends Application {
         Scene scene = new Scene(bPane);
 
         if(GlobalConstants.Companion.getDefaultFile() != null) {
-            textFileEditor = new TextFileEditor(GlobalConstants.Companion.getDefaultFile());
-            bPane.setCenter(textFileEditor);
+            mochaTextReader = new MochaTextReader(GlobalConstants.Companion.getDefaultFile());
+            bPane.setCenter(mochaTextReader);
         }
 
         primaryStage.setScene(scene);
@@ -53,9 +52,9 @@ public class Main extends Application {
         fileOpenItem.setOnAction(_ -> {
             fileToEdit = FileUtil.getFileFromUser();
 
-            textFileEditor = new TextFileEditor(fileToEdit);
+            mochaTextReader = new MochaTextReader(fileToEdit);
 
-            bPane.setCenter(textFileEditor);
+            bPane.setCenter(mochaTextReader);
         });
 
         mBar.getMenus().add(fileMenu);
