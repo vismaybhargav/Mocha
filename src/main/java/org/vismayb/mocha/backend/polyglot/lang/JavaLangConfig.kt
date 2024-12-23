@@ -18,7 +18,7 @@ private val keywords: Array<String> = arrayOf(
     "while", "var"
 )
 
-public val theme: Map<Token.TokenType, Color> = mapOf(
+val theme: Map<Token.TokenType, Color> = mapOf(
     Token.TokenType.NUMBER_LITERAL to generateColor(215, 199, 129),
     Token.TokenType.STRING_LITERAL to generateColor(255, 127, 108),
     Token.TokenType.KEYWORD        to generateColor(249, 122, 176),

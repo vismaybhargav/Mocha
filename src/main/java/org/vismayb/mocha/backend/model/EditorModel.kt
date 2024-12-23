@@ -2,8 +2,12 @@ package org.vismayb.mocha.backend.model
 
 import com.github.javaparser.StaticJavaParser
 import com.github.javaparser.ast.CompilationUnit
+import com.github.javaparser.ast.body.AnnotationDeclaration
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+import com.github.javaparser.ast.body.EnumDeclaration
+import com.github.javaparser.ast.body.TypeDeclaration
 import org.vismayb.mocha.backend.polyglot.lang.*
+import org.vismayb.mocha.backend.token.DeclarationType
 
 import org.vismayb.mocha.backend.token.Token
 
@@ -14,6 +18,7 @@ class EditorModel(private val file: File) {
     private var tokens: MutableList<Token> = mutableListOf()
     var lines: List<String> = file.readLines() // Use a more robust approach
     var compilationUnit: CompilationUnit = StaticJavaParser.parse(file)
+    val declType: DeclarationType = determineFileDeclarationType()
 
     init {
         tokenizeFile()
@@ -75,4 +80,15 @@ class EditorModel(private val file: File) {
     private fun getTokensByType(type: Token.TokenType): List<Token> = tokens.filter { it.type == type }
 
     fun getTokensByLineNumber(lineNumber: Int): List<Token> = tokens.filter { it.lineNumber == lineNumber }
+
+    private fun determineFileDeclarationType(): DeclarationType {
+        val mainType: TypeDeclaration<*>
+        if(compilationUnit.types.size > 1) {
+            for(type in compilationUnit.types) {
+                if(type.isPublic)
+            }
+        } else {
+            mainType = typ
+        }
+    }
 }
