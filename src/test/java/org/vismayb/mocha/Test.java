@@ -2,7 +2,11 @@ package org.vismayb.mocha;
 
 import java.util.Arrays;
 
-public class Test {
+enum Test {
+    HELLO
+}
+
+class Test {
     private static final double NEGATIVE_PIE = 3.1415;
     private static final long nanoseconds = -23423424324L;
 

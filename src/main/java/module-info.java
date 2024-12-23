@@ -4,5 +4,4 @@ open module Mocha {
     requires javafx.graphics;
     requires kotlin.stdlib;
     requires com.github.javaparser.core;
-    requires java.desktop;
 }
