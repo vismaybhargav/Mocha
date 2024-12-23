@@ -1,35 +1,31 @@
-package org.vismayb.mocha.view.component;
+package org.vismayb.mocha.view.component.editor;
 
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontSmoothingType;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.vismayb.mocha.GlobalConstants;
-import org.vismayb.mocha.backend.polyglot.lang.JavaLangConfigKt;
 import org.vismayb.mocha.logging.Loggable;
 import org.vismayb.mocha.backend.token.Token;
+import org.vismayb.mocha.view.util.TextStyleUtil;
 import org.vismayb.mocha.view.util.ColorHelperKt;
 
 import java.util.List;
 
-public class EditorLine extends HBox implements Loggable {
+public class TextLine extends HBox implements Loggable {
     public static final StringBuilder logFileBuilder = new StringBuilder();
     private final String text;
     private final List<Token> tokens;
     private final int lineNumber;
 
-    public EditorLine(final String text, final List<Token> tokens, final int lineNumber) {
+    public TextLine(final String text, final List<Token> tokens, final int lineNumber) {
         this.text = text;
         this.tokens = tokens;
         this.lineNumber = lineNumber;
 
         log();
         generateView();
-
     }
 
     /**
@@ -69,7 +65,10 @@ public class EditorLine extends HBox implements Loggable {
         getChildren().add(createText(token.getContent(),
                 switch (token.getType()) {
                     case CALL, CLASS, NUMBER_LITERAL, STRING_LITERAL, KEYWORD, COMMENT:
-                        yield JavaLangConfigKt.getTheme().get(token.getType());
+                        yield GlobalConstants.Companion
+                                .getTheme()
+                                .getEditorTokenMap()
+                                .get(token.getType());
                     default:
                         yield ColorHelperKt.generateColor(0, 189, 0); // For debugging new highlights
                 })
@@ -82,7 +81,12 @@ public class EditorLine extends HBox implements Loggable {
      * @param string string to be added to the lineContainer view
      */
     private void addStringToLineContainer(final String string) {
-        getChildren().add(createText(string, ColorHelperKt.generateColor(223, 223, 223)));
+        getChildren().add(
+                TextStyleUtil.getDefaultStyle(
+                        string,
+                        GlobalConstants.Companion.getTheme().getEditorForeground()
+                )
+        );
     }
 
     /**
@@ -93,18 +97,13 @@ public class EditorLine extends HBox implements Loggable {
      * @return the text object
      */
     private static Text createText(final String content, final Color color) {
-        // Create the text object with some sensible defaults
-        // TODO: Should be controlled by passing in settings.
-        var t = new Text(content);
-        t.setFont(Font.font("JetBrains Mono", FontWeight.SEMI_BOLD, 15));
-        t.setFill(color);
-        t.setFontSmoothingType(FontSmoothingType.LCD);
+        Text t = TextStyleUtil.getDefaultStyle(content, color);
 
         // This part should probably not be in this because its a "component"
         // but im guessing it should be fine cuz can just remove the cli functionality
         if(!GlobalConstants.Companion.isDevMode()) return t;
 
-        Tooltip tTip = new Tooltip(
+        var tTip = new Tooltip(
                 "Content: \"" + content + "\"\n" +
                         "Color: " + ColorHelperKt.getReadableColorString(color)
         );
