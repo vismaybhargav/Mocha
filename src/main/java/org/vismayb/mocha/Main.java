@@ -8,7 +8,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import org.vismayb.mocha.backend.util.FileUtil;
+import org.vismayb.mocha.backend.util.FileUtilKt;
 import org.vismayb.mocha.view.component.MochaTextReader;
 
 import java.io.File;
@@ -22,20 +22,23 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         parseArgs(Arrays.asList(args));
-        if(GlobalConstants.Companion.isLoggingEnabled()) FileUtil.purgeDirectory(new File("logs"));
+        if(GlobalConstants.Companion.isLoggingEnabled()) FileUtilKt.purgeDirectory(new File("logs"));
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         applyStageConfigs(primaryStage);
 
         MenuBar mBar = createMenuBar();
         bPane.setTop(mBar);
-        Scene scene = new Scene(bPane);
+        var scene = new Scene(bPane);
 
         if(GlobalConstants.Companion.getDefaultFile() != null) {
-            mochaTextReader = new MochaTextReader(GlobalConstants.Companion.getDefaultFile());
+            mochaTextReader = new MochaTextReader(
+                    GlobalConstants.Companion.getDefaultFile(),
+                    GlobalConstants.Companion.getTheme()
+            );
             bPane.setCenter(mochaTextReader);
         }
 
@@ -44,15 +47,15 @@ public class Main extends Application {
     }
 
     private MenuBar createMenuBar() {
-        MenuBar mBar = new MenuBar();
+        var mBar = new MenuBar();
 
-        Menu fileMenu = new Menu("File");
-        MenuItem fileOpenItem = new MenuItem("Open File");
+        var fileMenu = new Menu("File");
+        var fileOpenItem = new MenuItem("Open File");
 
         fileOpenItem.setOnAction(_ -> {
-            fileToEdit = FileUtil.getFileFromUser();
+            fileToEdit = FileUtilKt.getFileFromUser();
 
-            mochaTextReader = new MochaTextReader(fileToEdit);
+            mochaTextReader = new MochaTextReader(fileToEdit, GlobalConstants.Companion.getTheme());
 
             bPane.setCenter(mochaTextReader);
         });
