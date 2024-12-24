@@ -1,5 +1,10 @@
 package org.vismayb.mocha;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -23,6 +28,12 @@ public class Main extends Application {
     public static void main(String[] args) {
         parseArgs(Arrays.asList(args));
         if(GlobalConstants.Companion.isLoggingEnabled()) FileUtilKt.purgeDirectory(new File("logs"));
+
+        // Add a reflection based solver to the parser configuration so that we can resolve symbols accurately
+        StaticJavaParser
+                .getParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
+
         launch(args);
     }
 

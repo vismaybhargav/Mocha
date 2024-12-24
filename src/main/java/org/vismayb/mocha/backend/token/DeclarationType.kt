@@ -6,4 +6,5 @@ enum class DeclarationType {
     RECORD, // Record declarations
     INTERFACE, // Interface declarations
     ANNOTATION, // Annotation declarations
+    EXCEPTION, // Exception declarations
 }

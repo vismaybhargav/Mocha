@@ -5,7 +5,9 @@ import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.body.AnnotationDeclaration
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.EnumDeclaration
+import com.github.javaparser.ast.body.RecordDeclaration
 import com.github.javaparser.ast.body.TypeDeclaration
+
 import org.vismayb.mocha.backend.polyglot.lang.*
 import org.vismayb.mocha.backend.token.DeclarationType
 
@@ -18,7 +20,7 @@ class EditorModel(private val file: File) {
     private var tokens: MutableList<Token> = mutableListOf()
     var lines: List<String> = file.readLines() // Use a more robust approach
     var compilationUnit: CompilationUnit = StaticJavaParser.parse(file)
-    val declType: DeclarationType = determineFileDeclarationType()
+    var declType: DeclarationType = determineFileDeclarationType()
 
     init {
         tokenizeFile()
@@ -79,16 +81,40 @@ class EditorModel(private val file: File) {
 
     private fun getTokensByType(type: Token.TokenType): List<Token> = tokens.filter { it.type == type }
 
-    fun getTokensByLineNumber(lineNumber: Int): List<Token> = tokens.filter { it.lineNumber == lineNumber }
+    private fun getTokensByLineNumber(lineNumber: Int): List<Token> = tokens.filter { it.lineNumber == lineNumber }
 
     private fun determineFileDeclarationType(): DeclarationType {
         val mainType: TypeDeclaration<*>
-        if(compilationUnit.types.size > 1) {
-            for(type in compilationUnit.types) {
-                if(type.isPublic)
-            }
+        if(compilationUnit.types.size == 1) {
+            mainType = compilationUnit.types[0]
         } else {
-            mainType = typ
+            mainType = compilationUnit.types.firstOrNull { it.nameAsString == file.nameWithoutExtension } ?: compilationUnit.types[0]
         }
+
+        return determineTypeDeclaration(mainType)
+    }
+
+    private fun determineTypeDeclaration(type: TypeDeclaration<*>): DeclarationType {
+        return when(type) {
+            is ClassOrInterfaceDeclaration -> {
+                if(type.isInterface) {
+                    DeclarationType.INTERFACE
+                } else {
+                    if(doesTypeExtend(type, "java.lang.Exception")) {
+                        DeclarationType.EXCEPTION
+                    } else {
+                        DeclarationType.CLASS
+                    }
+                }
+            }
+            is RecordDeclaration -> DeclarationType.RECORD
+            is EnumDeclaration -> DeclarationType.ENUM
+            is AnnotationDeclaration -> DeclarationType.ANNOTATION
+            else -> DeclarationType.CLASS
+        }
+    }
+
+    private fun doesTypeExtend(type: TypeDeclaration<*>, qualifiedName: String): Boolean {
+        return type.resolve().asClass().allAncestors.firstOrNull { it.qualifiedName == qualifiedName } != null
     }
 }
